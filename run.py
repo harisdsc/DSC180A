@@ -6,4 +6,3 @@ from src.preprocessing.ngrams import top_ngrams
 
 if __name__ == '__main__':
     args = sys.argv[1:]
-    
