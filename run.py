@@ -1,8 +1,18 @@
-import sys
-import json
-import pandas as pd
 from src.preprocessing.clean import clean_memo
 from src.preprocessing.ngrams import top_ngrams
+import subprocess
+import sys
 
 if __name__ == '__main__':
-    args = sys.argv[1:]
+    args = sys.argv
+
+    scripts = {'clean': 'src/preprocessing/clean.py',
+               'ngrams': 'src/preprocessing/ngrams.py'}
+
+    if len(args) > 1:
+        script = args[1]
+        if script == 'all':
+            for key in scripts.keys():
+                subprocess.run(['python3', scripts[key]])
+        if script in scripts:
+            subprocess.run(['python3', scripts[script]])

@@ -17,8 +17,8 @@ def clean_memo(config_path):
     with open(config_path) as f:
         config = json.load(f)
 
-    input_file = config['input_data']
-    output_file = config['output_data']
+    input_file = config['input_memos']
+    output_file = config['output_memos']
 
     # Load Data
     print(f"Loading data from {input_file}...")
@@ -63,3 +63,7 @@ def clean_memo(config_path):
 
     print("Preprocessing complete.")
     return df
+
+if __name__ == '__main__':
+    config_path = 'config/clean.json'
+    clean_memo(config_path)
