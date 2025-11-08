@@ -1,7 +1,6 @@
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 
-
 def top_ngrams(corpus: pd.Series, n_gram_range: tuple, top_n: int = 200):
     print(f"Analyzing {n_gram_range} n-grams...")
     vec = CountVectorizer(
@@ -25,3 +24,4 @@ def top_ngrams(corpus: pd.Series, n_gram_range: tuple, top_n: int = 200):
     # Sort by frequency (descending)
     words_freq = sorted(words_freq, key=lambda x: x[1], reverse=True)
     return words_freq[:top_n]
+

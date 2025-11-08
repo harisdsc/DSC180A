@@ -11,10 +11,10 @@ def _apply_regex_post(memo):
                 return groups[-1].strip()
     return memo
 
-def clean_memo(config_path):
+def clean_memo(config):
     # Load Configuration
     print("Starting preprocessing...")
-    with open(config_path) as f:
+    with open(config) as f:
         config = json.load(f)
 
     input_file = config['input_memos']
