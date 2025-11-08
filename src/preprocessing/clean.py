@@ -21,7 +21,7 @@ def clean_memo(config):
     output_file = config['output_memos']
 
     # Load Data
-    print(f"Loading data from {input_file}...")
+    print(f"Loading data from {input_file.split('/')[-1]}...")
     df = pd.read_csv(input_file)
 
     # Pass 1
@@ -58,7 +58,7 @@ def clean_memo(config):
     df.loc[mask, 'memo_post'] = df.loc[mask, 'memo_post'].str.split('#').str[0]
 
     # Save Output
-    print(f"Saving cleaned data to {output_file}...")
+    print(f"Saving cleaned data to {output_file.split('/')[-1]}...")
     df.to_csv(output_file, index=False)
 
     print("Preprocessing complete.")
