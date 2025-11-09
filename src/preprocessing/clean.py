@@ -54,9 +54,6 @@ def clean_memo(config):
     mask = df['memo_post'].str.contains("*", regex=False)
     df.loc[mask, 'memo_post'] = df.loc[mask, 'memo_post'].str.split('*').str[1::].str.join('')
 
-    mask = df['memo_post'].str.contains('#', regex=False)
-    df.loc[mask, 'memo_post'] = df.loc[mask, 'memo_post'].str.split('#').str[0]
-
     # Save Output
     print(f"Saving cleaned data to {output_file.split('/')[-1]}...")
     df.to_csv(output_file, index=False)
@@ -65,5 +62,5 @@ def clean_memo(config):
     return df
 
 if __name__ == '__main__':
-    config_path = 'config/clean.json'
+    config_path = 'configs/clean.json'
     clean_memo(config_path)
