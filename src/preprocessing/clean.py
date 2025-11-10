@@ -52,9 +52,6 @@ def clean_memo(config):
     df['memo_post'] = df['memo_post'].str.replace('.', '')
     df['memo_post'] = df['memo_post'].str.strip()
 
-    mask = df['memo_post'].str.contains("*", regex=False)
-    df.loc[mask, 'memo_post'] = df.loc[mask, 'memo_post'].str.split('*').str[1::].str.join('')
-
     # Save Output
     print(f"Saving cleaned data to {output_file.split('/')[-1]}...")
     df.to_csv(output_file, index=False)

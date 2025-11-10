@@ -4,6 +4,8 @@ import subprocess
 import sys
 
 if __name__ == '__main__':
+    subprocess.run(['git', 'pull'])
+
     args = sys.argv
 
     scripts = {'clean': 'src/preprocessing/clean.py',
