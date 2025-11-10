@@ -43,6 +43,7 @@ def clean_memo(config):
     # Pass 2
     print("Starting Pass 2...")
     df['memo_post'] = df['memo_pre'].apply(_apply_regex_post)
+    print("Pass 2 complete.")
 
     # Final Cleaning
     df['memo_post'] = df['memo_post'].str.replace('-', '')
@@ -58,9 +59,8 @@ def clean_memo(config):
     print(f"Saving cleaned data to {output_file.split('/')[-1]}...")
     df.to_csv(output_file, index=False)
 
-    print("Preprocessing complete.")
     return df
 
 if __name__ == '__main__':
-    config_path = 'configs/clean.json'
+    config_path = 'configs/preprocessing/clean.json'
     clean_memo(config_path)
