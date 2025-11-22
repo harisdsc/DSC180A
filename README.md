@@ -1,1 +1,1 @@
-- Example usage: `python3 run.py clean`
+- Example usage: `python3 run.py clean root`
