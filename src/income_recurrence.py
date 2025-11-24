@@ -77,7 +77,7 @@ def detect_recurring_transactions(df, date_col='posted_date', cluster_col='clust
         idxs  = temp.index.values
         
         n = len(dates)
-        if n < 3:
+        if n < 3: #<-- uncomment section
             continue
         
         recurring_groups = []
@@ -98,7 +98,7 @@ def detect_recurring_transactions(df, date_col='posted_date', cluster_col='clust
                 j += 1
 
             # keep groups with >= 3 transactions
-            if len(group_dates) >= 3:
+            if len(group_dates) >= 3:  #<-- uncomment
                 recurring_groups.append(group_idxs)
 
         # flatten unique transaction indices
@@ -107,3 +107,283 @@ def detect_recurring_transactions(df, date_col='posted_date', cluster_col='clust
         df.loc[list(recurring_idxs), 'is_recurring_income'] = True
     
     return df
+
+
+
+# def k_median_1d(amounts, K):
+#     """
+#     Basic 1D K-Median clustering using iterative refinement.
+#     """
+#     amounts = np.sort(amounts)
+    
+#     # Initial centers spaced evenly
+#     centers = np.linspace(amounts.min(), amounts.max(), K)
+
+#     while True:
+#         # Assign points to nearest center
+#         clusters = [[] for _ in range(K)]
+#         for x in amounts:
+#             idx = np.argmin(np.abs(centers - x))
+#             clusters[idx].append(x)
+        
+#         # Recompute centers as medians
+#         new_centers = np.array([
+#             np.median(cluster) if len(cluster) else centers[i]
+#             for i, cluster in enumerate(clusters)
+#         ])
+        
+#         if np.allclose(new_centers, centers):
+#             return clusters, centers
+        
+#         centers = new_centers
+
+def k_median_1d(amounts, K):
+    """
+    Run 1D K-median clustering with median center updates.
+    """
+    amounts = np.sort(np.array(amounts))
+
+    # initialization: evenly spaced centers
+    centers = np.linspace(amounts.min(), amounts.max(), K)
+
+    while True:
+        # Assign points to nearest center
+        clusters = [[] for _ in range(K)]
+        for x in amounts:
+            idx = np.argmin(np.abs(centers - x))
+            clusters[idx].append(x)
+
+        # Recompute medians
+        new_centers = np.array(
+            [np.median(cluster) if len(cluster) > 0 else centers[i]
+             for i, cluster in enumerate(clusters)]
+        )
+
+        # Converged?
+        if np.max(np.abs(new_centers - centers)) < 1e-6:
+            break
+
+        centers = new_centers
+
+    return clusters, centers
+
+
+# def silhouette_1d(amounts, clusters, centers):
+#     """
+#     Compute silhouette score for 1D K-median clustering.
+#     """
+#     amounts = np.array(amounts)
+#     labels = np.zeros(len(amounts), dtype=int)
+
+#     # Assign labels
+#     idx = 0
+#     for k, cluster in enumerate(clusters):
+#         for _ in cluster:
+#             labels[idx] = k
+#             idx += 1
+
+#     # Flatten cluster values in sorted order
+#     amounts_sorted = np.sort(amounts)
+    
+#     scores = []
+    
+#     for i, x in enumerate(amounts_sorted):
+#         cluster_id = labels[i]
+#         cluster = clusters[cluster_id]
+        
+#         # a(i): intra-cluster distance
+#         a = np.mean(np.abs(x - np.array(cluster)))
+        
+#         # b(i): nearest other cluster center
+#         b = np.min([
+#             np.mean(np.abs(x - np.array(clusters[k])))
+#             for k in range(len(clusters))
+#             if k != cluster_id and len(clusters[k]) > 0
+#         ])
+        
+#         s = (b - a) / max(a, b)
+#         scores.append(s)
+    
+#     return np.mean(scores)
+
+def silhouette_1d(amounts, clusters):
+    """
+    1D silhouette score for K-median clustering.
+    """
+    amounts = np.sort(np.array(amounts))
+    K = len(clusters)
+
+    # Build index -> cluster_id mapping
+    labels = np.zeros(len(amounts), dtype=int)
+    idx = 0
+    for k, cluster in enumerate(clusters):
+        for _ in cluster:
+            labels[idx] = k
+            idx += 1
+
+    scores = []
+
+    for i, x in enumerate(amounts):
+        k = labels[i]
+        own_cluster = np.array(clusters[k])
+
+        # a(i) = mean distance to own cluster
+        a = np.mean(np.abs(own_cluster - x))
+
+        # b(i) = smallest mean distance to another cluster
+        b = np.inf
+        for j in range(K):
+            if j == k or len(clusters[j]) == 0:
+                continue
+            b = min(b, np.mean(np.abs(np.array(clusters[j]) - x)))
+
+        s = (b - a) / max(a, b)
+        scores.append(s)
+
+    return np.mean(scores)
+
+
+
+        
+# def find_best_k(amounts, kmax=7):
+    
+#     amounts = np.sort(amounts)
+    
+#     best_k = 1
+#     best_score = -1
+#     best_clusters = None
+#     best_centers = None
+    
+#     for K in range(2, kmax + 1):
+#         clusters, centers = k_median_1d(amounts, K)
+#         score = silhouette_1d(amounts, clusters, centers)
+        
+#         if score > best_score:
+#             best_score = score
+#             best_k = K
+#             best_clusters = clusters
+#             best_centers = centers
+    
+#     return best_k, best_clusters, best_centers, best_score
+
+# def find_best_k_for_consumer(amounts, kmax=10):
+#     amounts = np.array(amounts)
+
+#     if len(amounts) <= 2:
+#         return 1, [[x for x in amounts]], np.array([np.median(amounts)]), 0
+
+#     best_k = 1
+#     best_score = -np.inf
+#     best_clusters = None
+#     best_centers = None
+
+#     for K in range(2, min(kmax, len(amounts)) + 1):
+#         clusters, centers = k_median_1d(amounts, K)
+#         score = silhouette_1d(amounts, clusters)
+
+#         if score > best_score:
+#             best_k = K
+#             best_score = score
+#             best_clusters = clusters
+#             best_centers = centers
+
+#     return best_k, best_clusters, best_centers, best_score
+
+
+def find_best_k_for_consumer(amounts, kmax=10, tol=0.10):
+    amounts = np.array(amounts)
+
+    if len(amounts) <= 2:
+        return 1, [[x for x in amounts]], np.array([np.median(amounts)]), 0
+
+    best_score = -np.inf
+    best_clusters = None
+    best_centers = None
+    best_k = 1
+
+    for K in range(2, min(kmax, len(amounts)) + 1):
+        clusters, centers = k_median_1d(amounts, K)
+        clusters = [c for c in clusters if len(c) > 0]
+        centers = np.array([np.median(c) for c in clusters])
+
+        # split clusters if they violate tolerance -----
+        refined_clusters = []
+        for cluster in clusters:
+            if len(cluster) == 0:
+                continue
+            refined_clusters.extend(split_cluster_by_tolerance(cluster, tol=tol))
+            
+        if len(refined_clusters) == 0:
+            # fallback: everything is one cluster
+            refined_clusters = [list(amounts)]
+
+        # compute centers of refined clusters
+        refined_centers = np.array([np.median(c) for c in refined_clusters])
+
+        # silhouette score for refined clustering
+        score = silhouette_1d(amounts, refined_clusters)
+
+        if np.isnan(score):
+            score = -np.inf
+    
+        if score > best_score:
+            best_score = score
+            best_clusters = refined_clusters
+            best_centers = refined_centers
+            best_k = len(refined_clusters)
+
+        if best_clusters is None:
+            best_clusters = [list(amounts)]
+            best_centers = [np.median(amounts)]
+            best_k = 1
+
+    return best_k, best_clusters, best_centers, best_score
+
+
+def assign_cluster_ids(amounts, clusters):
+    """
+    Convert clusters (list of lists of amounts) back into a cluster_id array.
+    """
+    clusters = [c for c in clusters if len(c) > 0]  # remove empties
+
+    if len(clusters) == 0:                          # FALLBACK
+        return np.zeros(len(amounts), dtype=int)
+
+    amounts_sorted = np.sort(np.array(amounts))
+    labels_sorted = np.zeros(len(amounts_sorted), dtype=int)
+
+    idx = 0
+    for cid, cluster in enumerate(clusters):
+        for _ in cluster:
+            labels_sorted[idx] = cid
+            idx += 1
+
+    # Map back to original order
+    mapping = dict(zip(amounts_sorted, labels_sorted))
+    return np.array([mapping[x] for x in amounts])
+
+
+def split_cluster_by_tolerance(cluster, tol=0.10):
+    """
+    Given a single cluster (list of values), split it into subclusters
+    where each subcluster satisfies ±tol of its own median.
+    """
+    cluster = np.sort(np.array(cluster))
+    if len(cluster) == 0:
+        return []
+
+    subclusters = []
+
+    current = [cluster[0]]
+
+    for x in cluster[1:]:
+        med = np.median(current)
+        if abs(x - med) <= tol * med:
+            current.append(x)
+        else:
+            subclusters.append(current)
+            current = [x]
+
+    subclusters.append(current)
+    return subclusters
+
