@@ -1,43 +1,80 @@
 import subprocess
 import time
-import sys
 import os
+import argparse
 
-if __name__ == '__main__':
-    print('Pulling latest from repo...')
-    subprocess.run(['git', 'pull'])
+SCRIPTS = {
+    'clean': 'src/preprocessing/clean.py',
+    'ngrams': 'src/preprocessing/ngrams.py',
+    'train': 'src/models/train_model.py',
+    'load': 'src/models/load_model.py'
+}
 
-    args = sys.argv
+CONFIG_PATHS = {
+    'clean': 'configs/preprocessing/clean.json',
+    'ngrams': 'configs/preprocessing/ngrams.json',
+    'root': 'configs/models/root.json',
+    'train': 'configs/models/train.json',
+    'load': 'configs/models/load.json',
+    'catboost': 'configs/models/catboost.json' 
+}
 
-    scripts = {'clean': 'src/preprocessing/clean.py',
-               'ngrams': 'src/preprocessing/ngrams.py',
-               'train': 'src/models/train_model.py',
-                'load': 'src/models/load_model.py'}
+MODELS_PATHS = {
+    'catboost': 'src/models/catboost.cbm'
+}
 
-    configs = {'clean': 'configs/preprocessing/clean.json',
-                'ngrams': 'configs/preprocessing/ngrams.json',
-                'root': 'configs/models/root.json',
-                'train': 'configs/models/train.json',
-               'load': 'configs/models/load.json'}
+def run_command(script_key, config_key=None, model_key=None):
+    if script_key not in SCRIPTS:
+        print(f"Error: Unknown script '{script_key}'. Available: {list(SCRIPTS.keys())}")
+        return
+
+    script_path = SCRIPTS[script_key]
+    
+    cmd = ['python3', script_path]
+
+    if config_key:
+        config_path = CONFIG_PATHS.get(config_key, config_key)
+        cmd.append(config_path)
+    
+    if model_key:
+        model_path = MODELS_PATHS.get(model_key, model_key)
+        cmd.append(model_path)
 
     env = os.environ.copy()
     env['PYTHONPATH'] = os.getcwd() + os.pathsep + env.get('PYTHONPATH', '')
 
-    if len(args) > 1:
-        script = args[1]
-        config = args[2] if len(args) > 2 else None
-        model = args[3] if len(args) > 3 else None
-        if script == 'all':
-            for key in scripts.keys():
-                subprocess.run(['python3', scripts[key]], env=env)
-        if script in scripts:
-            start_time = time.time()
-            if config:
-                if model:
-                    subprocess.run(['python3', scripts[script], configs[config], model], env=env)
-                else:
-                    subprocess.run(['python3', scripts[script], configs[config]], env=env)
-            else:
-                subprocess.run(['python3', scripts[script]], env=env)
-            end_time = time.time()
-            print(f"'{script}' completed in {end_time - start_time:.2f} seconds")
+    print(f"Running: {' '.join(cmd)}")
+    start_time = time.time()
+    try:
+        subprocess.run(cmd, env=env, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error running {script_key}: {e}")
+        
+    print(f"'{script_key}' completed in {time.time() - start_time:.2f} seconds")
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+
+    # Positional Arguments
+    parser.add_argument('script')
+    parser.add_argument('config', nargs='?')
+    parser.add_argument('model', nargs='?')
+
+    # Flags
+    parser.add_argument('--no-pull', action='store_true')
+
+    args = parser.parse_args()
+
+    if not args.no_pull:
+        # Check if git is available before pulling to avoid crashes in non-git envs
+        try:
+            print('Pulling latest from repo...')
+            subprocess.run(['git', 'pull'], check=True)
+        except Exception as e:
+            print(f"Git pull skipped or failed: {e}")
+
+    if args.script == 'all':
+        for key in SCRIPTS.keys():
+            run_command(key, args.config, args.model)
+    else:
+        run_command(args.script, args.config, args.model)
