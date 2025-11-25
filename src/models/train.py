@@ -26,7 +26,6 @@ def train_model(config):
     
     # Feature Engineering
     print('Creating features..')
-    features_start = time.time()
     df['posted_date'] = pd.to_datetime(df['posted_date'])
     df['day_of_month'] = df['posted_date'].dt.day
     df['day_of_week'] = df['posted_date'].dt.dayofweek
@@ -42,8 +41,6 @@ def train_model(config):
     
     df = create_date_feats(df)
     df = create_amnt_feats(df)
-    features_end = time.time() - features_start()
-    print(f'Feature engineering completed in {features_end:.2f} seconds.')
     
     # Split data
     X = df.drop(columns=['posted_date', 'category', 'memo'])
@@ -80,7 +77,7 @@ def train_model(config):
     )
 
     train_end = time.time() - train_start
-    print(f'CatBoost training completed in {train_end:.2f} seconds.')
+    print(f'Training completed in {train_end:.2f} seconds.')
     
     # Evaluate Model 
     print('Evaluating Model...')
