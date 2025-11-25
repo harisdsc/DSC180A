@@ -32,9 +32,6 @@ def clean_memo(config_path):
     return df
 
 if __name__ == '__main__':
-    start_time = time.time()
     args = sys.argv
     config = args[1] if len(args) > 1 else 'configs/preprocessing/clean.json'
     clean_memo(config)
-    end_time = time.time()
-    print(f"Completed in {end_time - start_time:.2f} seconds.")
