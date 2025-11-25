@@ -9,11 +9,14 @@ if __name__ == '__main__':
     args = sys.argv
 
     scripts = {'clean': 'src/preprocessing/clean.py',
-               'train': 'src/models/train.py',
+               'train': 'src/models/train_model.py',
+                'load': 'src/models/load_model.py',
                'ngrams': 'src/preprocessing/ngrams.py'}
 
     configs = {'clean': 'configs/preprocessing/clean.json',
                'root': 'configs/models/root.json',
+                'train': 'configs/models/train.json',
+               'load': 'configs/models/load.json',
                'ngrams': 'configs/ngrams.json'}
 
     # Add current directory to PYTHONPATH so sub-scripts can import 'src'
