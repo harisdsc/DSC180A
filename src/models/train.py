@@ -6,6 +6,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from src.feature_extraction.date_amnt_feats import create_date_feats, create_amnt_feats
 
+os.chdir('../..')
+
 # Load Data
 df = pd.read_parquet('data/outflows.pqt')
 memos = pd.read_csv('data/memos_clean.csv')
