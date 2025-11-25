@@ -7,11 +7,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from src.models.load_data import load_data
 
-def load_model():
+def load_model(config):
     with open(config) as f:
         config = json.load(f)
 
-    catboost_file = config['catboost_file']
+    input_file = config['input_file']
 
     df = load_data()
     
@@ -42,7 +42,7 @@ def load_model():
 
     # Load Model
     print("Loading Catboost Model...")
-    model.load_model(catboost_file, format='cbm')
+    model.load_model(input_file, format='cbm')
 
     # Evaluate Model
     print('Evaluating Model...')

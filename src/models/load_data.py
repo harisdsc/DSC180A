@@ -1,3 +1,5 @@
+import numpy as np
+import pandas as pd
 from src.feature_extraction.date_amnt_feats import create_date_feats, create_amnt_feats
 
 def load_data():
