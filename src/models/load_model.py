@@ -41,7 +41,7 @@ def load_model(config):
     )
 
     # Load Model
-    print("Loading Catboost Model...")
+    print("Loading CatBoost Model...")
     model.load_model(input_file, format='cbm')
 
     # Evaluate Model
