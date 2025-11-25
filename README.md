@@ -8,3 +8,4 @@
 
 **Configs**:
 - `root`
+- `catboost`
