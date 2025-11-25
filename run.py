@@ -21,7 +21,10 @@ if __name__ == '__main__':
             for key in scripts.keys():
                 subprocess.run(['python3', scripts[key]])
         if script in scripts:
+            start_time = time.time()
             if config:
                 subprocess.run(['python3', scripts[script], configs[config]])
             else:
                 subprocess.run(['python3', scripts[script]])
+            end_time = time.time()
+            print(f"{script} completed in {end_time - start_time:.2f} seconds")

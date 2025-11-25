@@ -5,7 +5,7 @@ from catboost import CatBoostClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 
-os.chdir('../..')
+os.chdir('../../')
 from src.feature_extraction.date_amnt_feats import create_date_feats, create_amnt_feats
 
 # Load Data
