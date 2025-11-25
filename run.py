@@ -13,24 +13,20 @@ if __name__ == '__main__':
                'ngrams': 'src/preprocessing/ngrams.py'}
 
     configs = {'clean': 'configs/preprocessing/clean.json',
-               'root': 'configs/preprocessing/root.json',
+               'root': 'configs/models/root.json',
                'ngrams': 'configs/ngrams.json'}
-
-    # Add current directory to PYTHONPATH so scripts can import 'src' modules
-    env = os.environ.copy()
-    env['PYTHONPATH'] = os.getcwd() + os.pathsep + env.get('PYTHONPATH', '')
 
     if len(args) > 1:
         script = args[1]
         config = args[2] if len(args) > 2 else None
         if script == 'all':
             for key in scripts.keys():
-                subprocess.run(['python3', scripts[key]], env=env)
+                subprocess.run(['python3', scripts[key]])
         if script in scripts:
             start_time = time.time()
             if config:
-                subprocess.run(['python3', scripts[script], configs[config]], env=env)
+                subprocess.run(['python3', scripts[script], configs[config]])
             else:
-                subprocess.run(['python3', scripts[script]], env=env)
+                subprocess.run(['python3', scripts[script]])
             end_time = time.time()
             print(f"{script} completed in {end_time - start_time:.2f} seconds")

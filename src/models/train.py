@@ -1,18 +1,19 @@
 import numpy as np
 import pandas as pd
 import time
-import os
+import json
+import sys
 from catboost import CatBoostClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from src.feature_extraction.date_amnt_feats import create_date_feats, create_amnt_feats
 
-def train_model():
+def train_model(config):
     
-    # with open(config) as f:
-    #     config = json.load(f)
+    with open(config) as f:
+        config = json.load(f)
 
-    # output_file = config['output_catboost']
+    output_file = config['output_file']
     
     # Load Data
     print('Loading data...')
@@ -88,9 +89,11 @@ def train_model():
     
     # Save Model
     print('Saving Model...')
-    model.save_model('src/models/catboost.cbm')
+    model.save_model(output_file)
 
 
 if __name__ == '__main__':
-    train_model()
+    args = sys.argv
+    config = args[1] if len(args) > 1 else 'configs/models/train.json'
+    train_model(config)
     

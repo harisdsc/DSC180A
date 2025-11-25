@@ -1,1 +1,3 @@
-{output_catboost:'src/models'}
+{
+    "output_file": "src/models/catboost.cbm"
+}
