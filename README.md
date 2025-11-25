@@ -1,10 +1,10 @@
-- **Example usage**: `python3 run.py <script> <config>`
+**Example usage**: `python3 run.py <script> <config>`
 
-- **Scripts**:
-- 'ngrams'
-- 'clean'
-- 'train'
-- 'load'
+**Scripts**:
+- `ngrams`
+- `clean`
+- `train`
+- `load`
 
-- **Configs**:
-- 'root'
+**Configs**:
+- `root`
