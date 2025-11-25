@@ -19,7 +19,6 @@ if __name__ == '__main__':
                'load': 'configs/models/load.json',
                'ngrams': 'configs/ngrams.json'}
 
-    # Add current directory to PYTHONPATH so sub-scripts can import 'src'
     env = os.environ.copy()
     env['PYTHONPATH'] = os.getcwd() + os.pathsep + env.get('PYTHONPATH', '')
 
