@@ -51,5 +51,5 @@ def load_model(config):
 
 if __name__ == '__main__':
     args = sys.argv
-    config = args[1] if len(args) > 1 else 'configs/models/load.json'
+    config = args[2] if len(args) > 2 else 'configs/models/load.json'
     load_model(config)
