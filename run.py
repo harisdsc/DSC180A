@@ -16,11 +16,12 @@ CONFIG_PATHS = {
     'root': 'configs/models/root.json',
     'train': 'configs/models/train.json',
     'load': 'configs/models/load.json',
+    # ADDED: Mapping for 'catboost' so the argument works
     'catboost': 'configs/models/catboost.json' 
 }
 
 MODELS_PATHS = {
-    'catboost': 'src/models/catboost.cbm'
+    'catboost' : 'src/models/catboost.cbm'
 }
 
 def run_command(script_key, config_key=None, model_key=None):
@@ -66,12 +67,12 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if not args.no_pull:
-        # Check if git is available before pulling to avoid crashes in non-git envs
+        print('Pulling latest from repo...')
+        # Added check=True to catch git errors
         try:
-            print('Pulling latest from repo...')
             subprocess.run(['git', 'pull'], check=True)
-        except Exception as e:
-            print(f"Git pull skipped or failed: {e}")
+        except subprocess.CalledProcessError:
+            print("Git pull failed, continuing execution...")
 
     if args.script == 'all':
         for key in SCRIPTS.keys():
