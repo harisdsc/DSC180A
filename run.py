@@ -7,6 +7,7 @@ if __name__ == '__main__':
     args = sys.argv
 
     scripts = {'clean': 'src/preprocessing/clean.py',
+               'train': 'src/models/train.py',
                'ngrams': 'src/preprocessing/ngrams.py'}
 
     configs = {'clean': 'configs/preprocessing/clean.json',
