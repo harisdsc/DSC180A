@@ -9,15 +9,15 @@ if __name__ == '__main__':
     args = sys.argv
 
     scripts = {'clean': 'src/preprocessing/clean.py',
+               'ngrams': 'src/preprocessing/ngrams.py',
                'train': 'src/models/train_model.py',
-                'load': 'src/models/load_model.py',
-               'ngrams': 'src/preprocessing/ngrams.py'}
+                'load': 'src/models/load_model.py'}
 
     configs = {'clean': 'configs/preprocessing/clean.json',
-               'root': 'configs/models/root.json',
+                'ngrams': 'configs/preprocessing/ngrams.json',
+                'root': 'configs/models/root.json',
                 'train': 'configs/models/train.json',
-               'load': 'configs/models/load.json',
-               'ngrams': 'configs/ngrams.json'}
+               'load': 'configs/models/load.json'}
 
     env = os.environ.copy()
     env['PYTHONPATH'] = os.getcwd() + os.pathsep + env.get('PYTHONPATH', '')
