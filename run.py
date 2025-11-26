@@ -66,12 +66,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if not args.no_pull:
-        # Check if git is available before pulling to avoid crashes in non-git envs
         try:
             print('Pulling latest from repo...')
             subprocess.run(['git', 'pull'], check=True)
         except Exception as e:
-            print(f"Git pull skipped or failed: {e}")
+            print(f"Git pull failed: {e}")
 
     if args.script == 'all':
         for key in SCRIPTS.keys():
