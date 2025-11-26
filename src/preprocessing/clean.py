@@ -1,63 +1,37 @@
-import regex as rules
-import pandas as pd
+import rules
+import sys
 import json
+import time
+import pandas as pd
 
-def _apply_regex_post(memo):
-    for pattern in rules.REGEX_POST:
-        match = pattern.match(memo)
-        if match:
-            groups = match.groups()
-            if groups:
-                return groups[-1].strip()
-    return memo
-
-def clean_memo(config):
-    # Load Configuration
+def clean_memo(config_path):
+    # 1. Load Configuration
     print("Starting preprocessing...")
-    with open(config) as f:
+    with open(config_path) as f:
         config = json.load(f)
 
     input_file = config['input_memos']
     output_file = config['output_memos']
 
-    # Load Data
-    print(f"Loading data from {input_file.split('/')[-1]}...")
+    # 2. Load Data
+    print(f"Loading data from {input_file}...")
     df = pd.read_csv(input_file)
 
-    # Pass 1
-    print("Starting Pass 1...")
-    memos = df['memo'].astype(str).fillna('').str.upper()
-    memos = memos.str.replace(r"\\u00A0", " ", regex=True)
-    memos = memos.str.replace(r"\\s{2,}", " ", regex=True)
-    memos = memos.str.strip()
+    # Initialize the cleaner class
+    cleaner = rules.TransactionCleaner()
 
-    for pattern, repl in rules.REGEX_PRE:
-        memos = memos.str.replace(pattern, repl, regex=True)
+    # 3. Apply Cleaning Logic
+    print("Processing transactions...")
+    df['clean_memo'] = df['memo'].apply(cleaner.clean)
 
-    memos = memos.str.replace(rules.NOISE_WORDS_REGEX, " ", regex=True)
-    memos = memos.str.replace(r"\\s{2,}", " ", regex=True)
-    memos = memos.str.replace(r"^[\\s-]+|[\\s-]+$", "", regex=True)
-    df['memo_pre'] = memos
-    print("Pass 1 complete.")
-
-    # Pass 2
-    print("Starting Pass 2...")
-    df['memo_post'] = df['memo_pre'].apply(_apply_regex_post)
-    print("Pass 2 complete.")
-
-    # Final Cleaning
-    df['memo_post'] = df['memo_post'].str.replace('-', '')
-    df['memo_post'] = df['memo_post'].str.replace("'", '')
-    df['memo_post'] = df['memo_post'].str.replace(':', '')
-    df['memo_post'] = df['memo_post'].str.replace('.', '')
-    df['memo_post'] = df['memo_post'].str.strip()
-
-    # Save Output
-    print(f"Saving cleaned data to {output_file.split('/')[-1]}...")
+    # 4. Save Output
+    print(f"Saving cleaned data to {output_file}...")
     df.to_csv(output_file, index=False)
+    print("Done.")
 
     return df
 
 if __name__ == '__main__':
-    config_path = 'configs/preprocessing/clean.json'
-    clean_memo(config_path)
+    args = sys.argv
+    config = args[1] if len(args) > 1 else 'configs/preprocessing/clean.json'
+    clean_memo(config)
