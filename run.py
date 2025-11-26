@@ -16,7 +16,6 @@ CONFIG_PATHS = {
     'root': 'configs/models/root.json',
     'train': 'configs/models/train.json',
     'load': 'configs/models/load.json',
-    # ADDED: Mapping for 'catboost' so the argument works
     'catboost': 'configs/models/catboost.json' 
 }
 
@@ -68,7 +67,6 @@ if __name__ == '__main__':
 
     if not args.no_pull:
         print('Pulling latest from repo...')
-        # Added check=True to catch git errors
         try:
             subprocess.run(['git', 'pull'], check=True)
         except subprocess.CalledProcessError:
