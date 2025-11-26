@@ -41,3 +41,35 @@ def holiday_context(date, holiday_dates, holiday_names):
         'prev_holiday': prev_name,
         'next_holiday': next_name
     })
+    
+####
+years = range(
+    outflow_train['posted_date'].dt.year.min(),
+    outflow_train['posted_date'].dt.year.max() + 1
+)
+us_holidays = {d: name for y in years for d, name in holidays.UnitedStates(years=[y]).items()}
+
+custom_holidays = add_custom_holidays(years)
+
+us_holidays = {
+    d: name
+    for y in years
+    for d, name in holidays.UnitedStates(years=[y]).items()
+}
+
+# Combine federal + custom holidays
+all_holidays = {**us_holidays, **custom_holidays}
+sorted_holidays = sorted(all_holidays.items(), key=lambda x: pd.Timestamp(x[0]))
+
+holiday_dates = [pd.Timestamp(d) for d, _ in sorted_holidays]
+holiday_names = [n for _, n in sorted_holidays]
+
+# Initialize pandarallel (enable tqdm progress bar)
+pandarallel.initialize(progress_bar=False, verbose=0)
+
+# Parallelized apply across CPU cores
+outflow_train[['days_since_prev_holiday', 'days_until_next_holiday',
+               'prev_holiday', 'next_holiday']] = (
+    outflow_train['posted_date']
+    .parallel_apply(lambda x: holiday_context(x, holiday_dates, holiday_names))
+)
