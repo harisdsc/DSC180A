@@ -1,6 +1,7 @@
 import pandas as pd
 import holidays
 from datetime import timedelta
+from pandarallel import pandarallel
 
 def add_custom_holidays(years):
     custom = {}
@@ -41,3 +42,47 @@ def holiday_context(date, holiday_dates, holiday_names):
         'prev_holiday': prev_name,
         'next_holiday': next_name
     })
+
+def generate_holiday_features(df, date_col='posted_date'):
+    """
+    Full pipeline:
+    - detect years present
+    - collect federal + custom holidays
+    - sort holiday list
+    - parallel-apply holiday_context
+    - return dataframe with new columns added
+    """
+
+    # ensure datetime
+    df = df.copy()
+    df[date_col] = pd.to_datetime(df[date_col], errors='coerce')
+
+    years = range(df[date_col].dt.year.min(), df[date_col].dt.year.max() + 1)
+
+    # Federal holidays
+    us_holidays = {
+        d: name
+        for y in years
+        for d, name in holidays.UnitedStates(years=[y]).items()
+    }
+
+    # Add custom holidays
+    custom_holidays = add_custom_holidays(years)
+
+    # Merge
+    all_holidays = {**us_holidays, **custom_holidays}
+
+    # Sort them
+    sorted_holidays = sorted(all_holidays.items(), key=lambda x: pd.Timestamp(x[0]))
+    holiday_dates = [pd.Timestamp(d) for d, _ in sorted_holidays]
+    holiday_names = [n for _, n in sorted_holidays]
+
+    # Apply holiday features
+    holiday_feats = df[date_col].parallel_apply(
+        lambda d: holiday_context(d, holiday_dates, holiday_names)
+    )
+
+    # Attach to original dataframe
+    df = pd.concat([df, holiday_feats], axis=1)
+
+    return df
