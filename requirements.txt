@@ -22,5 +22,6 @@ scikit-learn==1.7.2
 scipy==1.16.3
 six==1.17.0
 threadpoolctl==3.6.0
+torch==2.9.1
 tzdata==2025.2
 zope.interface==8.1.1
