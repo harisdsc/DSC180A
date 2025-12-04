@@ -1,0 +1,4 @@
+{
+    "model_file": "src/models/transformer/transformer.pt",
+    "model": "Transformer"
+}

@@ -5,6 +5,7 @@
 data/
 catboost_info/
 notebooks/kyle/venv
+<<<<<<< HEAD
 notebooks/kyle/categorio_v3_meta.pt
 notebooks/kyle/feature_statistics.csv
 notebooks/kyle/memo_transformer_artifacts.pkl
@@ -13,3 +14,6 @@ notebooks/kyle/memos_cleaned.csv
 notebooks/kyle/numerical_features.csv
 venv/
 .venv
+=======
+env/
+>>>>>>> main

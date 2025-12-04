@@ -1,15 +1,19 @@
 import numpy as np
 import pandas as pd
+import time
+
 from src.feature_extraction.date_amnt_feats import create_date_feats, create_amnt_feats
+from src.feature_extraction.holiday_feats import generate_holiday_features
 
 def load_data():
+    start = time.time()
     # Load Data
     print('Loading data...')
     df = pd.read_parquet('data/outflows.pqt')
     memos = pd.read_csv('data/memos_clean.csv')
     df['clean_memo'] = memos['clean_memo']
     
-    df['clean_memo'] = df['clean_memo'].fillna('UNKNOWN')
+    df['clean_memo'] = df['clean_memo'].fillna(df['memo'])
     df = df[df['memo'] != df['category']]
     
     # Feature Engineering
@@ -35,5 +39,7 @@ def load_data():
     df['user_memo_count_z'] = np.log1p(df['user_memo_count'])
     df = create_date_feats(df)
     df = create_amnt_feats(df)
+    df = generate_holiday_features(df)
+    print(f'Loading data/feature engineering done in {time.time() - start:.2f} seconds.')
     
     return df

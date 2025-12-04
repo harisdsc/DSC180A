@@ -1,7 +1,5 @@
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
-import holidays
 
 # 1. create date features
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -72,12 +70,6 @@ def create_amnt_feats(fit_df):
                                            .transform('median')
                                           )
     fit_df['month_med_amnt_diff'] = fit_df['amount']-fit_df['month_med_amnt']
-    
-# Standard deviation of amounts per consumer
-    group_stats = fit_df.groupby('prism_consumer_id')['amount'].agg(['mean', 'std'])
-    mean,std = group_stats['mean'],group_stats['std']
-    fit_df['amnt_zscore'] = (fit_df['amount'] - mean) / std # compute z-score
-    fit_df['amnt_zscore'] = fit_df['amnt_zscore'].fillna(0) # optional: fill NaN z-scores (e.g. if std = 0 or only one transaction)
     
 # Log-transformed amount --> fix skewness of amounts
     fit_df['log_amnt'] = np.log1p(fit_df['amount'])
