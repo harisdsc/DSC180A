@@ -232,8 +232,7 @@ def train_transformer(X_train, y_train, X_test, y_test, model_file):
         print(f"Epoch {epoch+1} completed in {time.time() - epoch_start_time:.2f} seconds.")
 
     print(f"Training completed in {time.time() - total_start_time:.2f} seconds.")
-
-    # ... [Rest of your save/inference code remains the same] ...
+    
     print(f"Saving model to {model_file}...")
     
     save_content = {
