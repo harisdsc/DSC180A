@@ -1,7 +1,7 @@
 import torch
 import torch.utils.data as data
 
-from src.models.transformer import TransactionClassifier, TransactionDataset
+from src.models.train_transformer import TransactionClassifier, TransactionDataset
 
 def load_transformer(model_file, df, X_test, y_test):
     checkpoint = torch.load(model_file, weights_only=False)
