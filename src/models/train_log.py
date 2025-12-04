@@ -44,7 +44,7 @@ preprocess = ColumnTransformer(
 
 pipe = Pipeline([
     ("preprocess", preprocess),
-    ("clf", LogisticRegression(max_iter=1000, n_jobs=-1))
+    ("clf", LogisticRegression(max_iter=1000, n_jobs=-1, verbose=1))
 ])
 
 def train_logistic_regression(X_train, y_train, X_test, y_test, model_file):
