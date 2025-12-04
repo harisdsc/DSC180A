@@ -210,9 +210,6 @@ def train_transformer(X_train, y_train, X_test, y_test, model_file):
             loss = criterion(outputs, labels)
             loss.backward()
             
-            # ### FIX 2: Gradient Clipping ###
-            # Transformers are unstable. If gradients get too large, they explode to NaN.
-            # This limits the "norm" (size) of the gradients to 1.0 before we update weights.
             torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
             
             optimizer.step()
