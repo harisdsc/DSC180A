@@ -32,7 +32,7 @@ def train_model(config):
             preds = model.predict(X_test)
         elif selected_model == 'LogRegression':
              ...
-             
+
         print('Evaluating Model...')
         print(classification_report(y_test, preds))
         print('Confusion Matrix:')
