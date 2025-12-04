@@ -1,3 +1,4 @@
+from sklearn.model_selection import train_test_split
 import numpy as np
 import pandas as pd
 import time
@@ -7,17 +8,16 @@ from src.preprocessing.rules import TransactionCleaner
 from src.feature_extraction.date_amnt_feats import create_date_feats, create_amnt_feats
 from src.feature_extraction.holiday_feats import generate_holiday_features
 
-def load_data():
+def load_data(script=False):
     # Load Data
-    print('Loading data...')
-    if os.path.exists('data/outflows_clean.csv'):
+    print('Processing data...')
+    if os.path.exists('data/outflows_clean.csv') and not script:
         df = pd.read_csv('data/outflows_clean.csv')
     else:
-        start = time.time()
         df = pd.read_parquet('data/outflows.pqt')
         df = df[df['memo'] != df['category']]
 
-        if os.path.exists('data/memo_clean.csv'):
+        if os.path.exists('data/memo_clean.csv') and not script:
             memos = pd.read_csv('data/memo_clean.csv')
             df['clean_memo'] = memos['clean_memo']
         else:
@@ -31,6 +31,7 @@ def load_data():
             
         # Feature Engineering
         print('Creating features...')
+        start_feats = time.time()
         df['posted_date'] = pd.to_datetime(df['posted_date'])
         df['day_of_month'] = df['posted_date'].dt.day
         df['day_of_week'] = df['posted_date'].dt.dayofweek
@@ -47,16 +48,28 @@ def load_data():
         df['whole_dollar'] = np.where(df['cents'] == 0, 1, 0)
         df = df.sort_values(['prism_consumer_id', 'posted_date'])
         df['days_since_last_txn'] = df.groupby('prism_consumer_id')['posted_date'].diff().dt.days
+        df['days_since_last_txn'] = df['days_since_last_txn'].fillna(0)
         df['user_memo_count'] = df.groupby(['prism_consumer_id', 'clean_memo']).cumcount()
+        df['user_memo_count'] = df['user_memo_count'].fillna(0)
         df['days_since_last_txn_z'] = np.log1p(df['days_since_last_txn'])
         df['user_memo_count_z'] = np.log1p(df['user_memo_count'])
         df = create_date_feats(df)
         df = create_amnt_feats(df)
         df = generate_holiday_features(df)
-        print(f'Feature engineering completed in {time.time() - start:.2f} seconds.')
+        print(f'Feature engineering completed in {time.time() - start_feats:.2f} seconds.')
+
         print('Saving processed data to data/outflows_clean.csv...')
         df.to_csv('data/outflows_clean.csv', index=False)
     
     df['clean_memo'] = df['clean_memo'].fillna(df['memo'])
-    
-    return df
+
+    # Split data
+    X = df.drop(columns=['posted_date', 'category', 'memo', \
+                         'prism_consumer_id', 'prism_account_id'])
+    y = df['category']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    return df, X_train, X_test, y_train, y_test
+
+if __name__ == '__main__':
+    df, X_train, X_test, y_train, y_test = load_data(script=True)

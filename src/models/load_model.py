@@ -1,6 +1,5 @@
 
 from sklearn.metrics import classification_report, confusion_matrix
-from sklearn.model_selection import train_test_split
 import json
 import sys
 
@@ -15,13 +14,7 @@ def load_model(config):
     model_file = config['model_file']
     selected_model = config['model']
 
-    df = load_data()
-    
-    # Split data
-    X = df.drop(columns=['posted_date', 'category', 'memo', \
-                         'prism_consumer_id', 'prism_account_id'])
-    y = df['category']
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    df, X_train, X_test, y_train, y_test = load_data()
 
     # Load model
     if selected_model == 'CatBoost':

@@ -4,8 +4,8 @@ import time
 
 
 text_cols = ['clean_memo']
-cat_cols = ['day_of_week', 'month', 'quarter', 'whole_dollar', \
-            'prev_holiday', 'next_holiday']
+cat_cols = ['day_of_week', 'month', 'quarter', 'whole_dollar', 'prev_holiday', \
+            'next_holiday']
 
 # Initialize Model
 model = CatBoostClassifier(

@@ -3,6 +3,7 @@
 **Scripts**:
 - `ngrams`
 - `clean` 
+- `data`
 - `train`
 - `load`
 

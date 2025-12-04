@@ -4,8 +4,9 @@ import os
 import argparse
 
 SCRIPTS = {
-    'clean': 'src/preprocessing/clean.py',
     'ngrams': 'src/preprocessing/ngrams.py',
+    'clean': 'src/preprocessing/clean.py',
+    'data': 'src/models/load_data.py',
     'train': 'src/models/train_model.py',
     'load': 'src/models/load_model.py'
 }
@@ -14,7 +15,7 @@ CONFIG_PATHS = {
     'clean': 'configs/preprocessing/clean.json',
     'ngrams': 'configs/preprocessing/ngrams.json',
     'catboost': 'configs/models/catboost.json',
-    'logistic-regression': 'configs/models/logistic_regression.json',
+    'log-reg': 'configs/models/logistic_regression.json',
     'transformer': 'configs/models/transformer.json'
 }
 

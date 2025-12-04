@@ -5,6 +5,7 @@ import sys
 
 from src.models.load_data import load_data
 from src.models.train_catboost import train_catboost
+from src.models.train_log import train_logistic_regression
 from src.models.train_transformer import  train_transformer
     
 def train_model(config):
@@ -15,19 +16,14 @@ def train_model(config):
     selected_model = config['model']
     
     # Load Data + Feature Engineering
-    df = load_data()
-    
-    # Split data
-    X = df.drop(columns=['posted_date', 'category', 'memo', \
-                        'prism_consumer_id', 'prism_account_id'])
-    y = df['category']
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    df, X_train, X_test, y_train, y_test = load_data()
 
     if selected_model == 'CatBoost':
         model = train_catboost(X_train, y_train, X_test, y_test, model_file)
         preds = model.predict(X_test)
     elif selected_model == 'LogisticRegression':
-        ...
+        model = train_logistic_regression(X_train, y_train, X_test, y_test, model_file)
+        preds = model.predict(X_test)
     elif selected_model == 'Transformer':
         preds = train_transformer(X_train, y_train, X_test, y_test, model_file)
         

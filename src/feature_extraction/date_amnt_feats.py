@@ -52,6 +52,8 @@ def create_date_feats(fit_df):
     )
     
     df['days_since_first_txn'] = (df['posted_date'] - first_txn).dt.days # compute days since first transaction
+    df['days_since_first_txn'] = df['days_since_first_txn'].fillna(0)
+
     
     fit_add = df.sort_index() # restore to original order
     return fit_add
