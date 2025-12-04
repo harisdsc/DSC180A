@@ -17,7 +17,7 @@ def load_data():
     df = df[df['memo'] != df['category']]
     
     # Feature Engineering
-    print('Creating features..')
+    print('Creating features...')
     df['posted_date'] = pd.to_datetime(df['posted_date'])
     df['day_of_month'] = df['posted_date'].dt.day
     df['day_of_week'] = df['posted_date'].dt.dayofweek
