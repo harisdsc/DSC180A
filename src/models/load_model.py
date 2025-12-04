@@ -31,10 +31,10 @@ def load_model(config):
         print(f"Loading CatBoost from {model_file.split('/')[-1]}...")
         model.load_model(model_file, format='cbm')
         preds = model.predict(X_test)
-    elif selected_model == 'LogRegression':
+    elif selected_model == 'LogisticRegression':
         ...
     elif selected_model == 'Transformer':
-            print(f"Loading Transformer Model from {model_file.split('/')[-1]}...")
+            print(f"Loading Transformer from {model_file.split('/')[-1]}...")
             
             checkpoint = torch.load(model_file)
             device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.mps.is_available() else "cpu")
