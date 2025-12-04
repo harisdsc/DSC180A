@@ -2,7 +2,7 @@
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.model_selection import train_test_split
 from src.models.catboost.catboost import model as catboost_model
-import torch
+from torch import torch, TransactionClassifier, TransactionDataset, DataLoader
 import json
 import sys
 
