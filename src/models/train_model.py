@@ -13,7 +13,7 @@ def train_model(config):
     with open(config) as f:
         config = json.load(f)
 
-    output_file = config['output_file']
+    model_file = config['model_file']
     selected_model = config['model']
     
     # Load Data + Feature Engineering
@@ -29,7 +29,7 @@ def train_model(config):
             ...
     else:
         if selected_model == 'CatBoost':
-            model = train_catboost(X_train, y_train, X_test, y_test, output_file)
+            model = train_catboost(X_train, y_train, X_test, y_test, model_file)
             preds = model.predict(X_test)
         elif selected_model == 'LogRegression':
              ...
