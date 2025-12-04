@@ -8,13 +8,14 @@ from sklearn.metrics import classification_report, confusion_matrix
 
 from src.models.load_data import load_data
 from src.models.catboost.catboost import train_catboost
+from src.models.transformer.transformer import train_transformer
     
 def train_model(config):
     with open(config) as f:
         config = json.load(f)
 
-    output_file = config['output_file']
-    selected_model = config['model']
+    output_file = "private/DSC180A/src/models/transformer/transformer.pt"#config['output_file']
+    selected_model = "Transformer" #config['model']
     
     # Load Data + Feature Engineering
     df = load_data()
@@ -25,7 +26,7 @@ def train_model(config):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     if selected_model == 'Transformer':
-            ...
+            preds = train_transformer(X_train, y_train, X_test, y_test, output_file)
     else:
         if selected_model == 'CatBoost':
             model = train_catboost(X_train, y_train, X_test, y_test, output_file)

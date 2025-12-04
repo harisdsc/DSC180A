@@ -11,3 +11,5 @@ notebooks/kyle/memo_transformer_artifacts.pkl
 notebooks/kyle/memo_transformer_multimodal.pt
 notebooks/kyle/memos_cleaned.csv
 notebooks/kyle/numerical_features.csv
+venv/
+.venv
