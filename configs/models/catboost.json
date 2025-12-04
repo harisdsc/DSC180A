@@ -1,3 +1,5 @@
 {
-    "input_file": "src/models/catboost.cbm"
+    "input_file": "src/models/catboost/catboost.cbm",
+    "output_file": "src/models/catboost/catboost.cbm",
+    "model": "CatBoost"
 }

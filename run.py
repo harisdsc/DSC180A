@@ -20,7 +20,7 @@ CONFIG_PATHS = {
 }
 
 MODELS_PATHS = {
-    'catboost' : 'src/models/catboost.cbm'
+    'catboost' : 'src/models/catboost/catboost.cbm'
 }
 
 def run_command(script_key, config_key=None, model_key=None):
