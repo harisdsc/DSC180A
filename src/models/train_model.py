@@ -9,14 +9,13 @@ from src.models.train_log import train_logistic_regression
 from src.models.train_transformer import  train_transformer
     
 def train_model(config):
+    df, X_train, X_test, y_train, y_test = load_data()
+    
     with open(config) as f:
         config = json.load(f)
 
     model_file = config['model_file']
     selected_model = config['model']
-    
-    # Load Data + Feature Engineering
-    df, X_train, X_test, y_train, y_test = load_data()
 
     if selected_model == 'CatBoost':
         model = train_catboost(X_train, y_train, X_test, y_test, model_file)

@@ -9,14 +9,15 @@ from src.models.train_catboost import model as catboost_model
 from src.models.load_transformer import load_transformer
 from src.models.train_log import pipe as logreg_pipe
 
+
 def load_model(config):
+    df, X_train, X_test, y_train, y_test = load_data()
+    
     with open(config) as f:
         config = json.load(f)
 
     model_file = config['model_file']
     selected_model = config['model']
-
-    df, X_train, X_test, y_train, y_test = load_data()
 
     # Load model
     if selected_model == 'CatBoost':
