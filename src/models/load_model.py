@@ -1,11 +1,13 @@
 
 from sklearn.metrics import classification_report, confusion_matrix
+import pickle
 import json
 import sys
 
 from src.models.load_data import load_data
 from src.models.train_catboost import model as catboost_model
 from src.models.load_transformer import load_transformer
+from src.models.train_log import pipe as logreg_pipe
 
 def load_model(config):
     with open(config) as f:
@@ -23,7 +25,10 @@ def load_model(config):
         model.load_model(model_file, format='cbm')
         preds = model.predict(X_test)
     elif selected_model == 'LogisticRegression':
-        ...
+        model = logreg_pipe
+        print(f"Loading model from {model_file.split('/')[-1]}...")
+        model = pickle.load(open(model_file, 'rb'))
+        preds = model.predict(X_test)
     elif selected_model == 'Transformer':
         print(f"Loading model from {model_file.split('/')[-1]}...")
         preds = load_transformer(model_file, df, X_test, y_test) 
