@@ -16,11 +16,13 @@ CONFIG_PATHS = {
     'root': 'configs/models/root.json',
     'train': 'configs/models/train.json',
     'load': 'configs/models/load.json',
-    'catboost': 'configs/models/catboost.json' 
+    'catboost': 'configs/models/catboost.json',
+    'transformer': 'configs/models/transformer.json'
 }
 
 MODELS_PATHS = {
-    'catboost' : 'src/models/catboost/catboost.cbm'
+    'catboost' : 'src/models/catboost/catboost.cbm',
+    'transformer': 'src/models/transformer/transformer.pt'
 }
 
 def run_command(script_key, config_key=None, model_key=None):
