@@ -2,6 +2,7 @@
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.model_selection import train_test_split
 from src.models.catboost.catboost import model as catboost_model
+import torch
 import json
 import sys
 
@@ -25,13 +26,13 @@ def load_model(config):
     # Load model
     if selected_model == 'CatBoost':
         model = catboost_model
-        print("Loading CatBoost...")
+        print(f"Loading CatBoost from {model_file.split('/')[-1]}...")
         model.load_model(model_file, format='cbm')
         preds = model.predict(X_test)
     elif selected_model == 'LogRegression':
         ...
     elif selected_model == 'Transformer':
-            print(f"Loading Transformer Model from {model_file}...")
+            print(f"Loading Transformer Model from {model_file.split('/')[-1]}...")
             
             checkpoint = torch.load(model_file)
             device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.mps.is_available() else "cpu")
