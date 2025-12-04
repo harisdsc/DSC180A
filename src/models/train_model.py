@@ -1,42 +1,31 @@
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, confusion_matrix
 import numpy as np
 import pandas as pd
+import time
 import json
 import sys
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, confusion_matrix
 
 from src.models.load_data import load_data
 from src.models.catboost.catboost import train_catboost
-<<<<<<< HEAD
-from src.models.transformer.transformer import train_transformer
-=======
-from src.models.transformer.transformer import  train_transformer
->>>>>>> main
     
 def train_model(config):
     with open(config) as f:
         config = json.load(f)
 
-<<<<<<< HEAD
-    output_file = "private/DSC180A/src/models/transformer/transformer.pt"#config['output_file']
-    selected_model = "Transformer" #config['model']
-=======
-    model_file = config['model_file']
+    output_file = config['output_file']
     selected_model = config['model']
->>>>>>> main
     
     # Load Data + Feature Engineering
     df = load_data()
     
     # Split data
-    X = df.drop(columns=['posted_date', 'category', 'memo', \
-                        'prism_consumer_id', 'prism_account_id'])
+    X = df.drop(columns=['posted_date', 'category', 'memo'])
     y = df['category']
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-<<<<<<< HEAD
     if selected_model == 'Transformer':
-            preds = train_transformer(X_train, y_train, X_test, y_test, output_file)
+            ...
     else:
         if selected_model == 'CatBoost':
             model = train_catboost(X_train, y_train, X_test, y_test, output_file)
@@ -48,22 +37,7 @@ def train_model(config):
         print(classification_report(y_test, preds))
         print('Confusion Matrix:')
         print(confusion_matrix(y_test, preds))
-=======
-    if selected_model == 'CatBoost':
-        model = train_catboost(X_train, y_train, X_test, y_test, model_file)
-        preds = model.predict(X_test)
-    elif selected_model == 'LogRegression':
-        ...
-    elif selected_model == 'Transformer':
-        preds = train_transformer(X_train, y_train, X_test, y_test, model_file)
->>>>>>> main
         
-    # Evaluate Model
-    print('Evaluating Model...')
-    print('Classification Report:')
-    print(classification_report(y_test, preds))
-    print('Confusion Matrix:')
-    print(confusion_matrix(y_test, preds))
         
 if __name__ == '__main__':
     args = sys.argv
