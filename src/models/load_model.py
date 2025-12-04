@@ -6,7 +6,7 @@ import sys
 
 from src.models.load_data import load_data
 from src.models.train_catboost import model as catboost_model
-from src.models.load_catboost import load_catboost
+from src.models.load_transformer import load_transformer
 
 def load_model(config):
     with open(config) as f:
@@ -33,7 +33,7 @@ def load_model(config):
         ...
     elif selected_model == 'Transformer':
         print(f"Loading Transformer from {model_file.split('/')[-1]}...")
-        preds = load_catboost(model_file, df, X_test, y_test) 
+        preds = load_transformer(model_file, df, X_test, y_test) 
              
     # Evaluate Model
     print('Evaluating model...')
