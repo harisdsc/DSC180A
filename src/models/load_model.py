@@ -7,8 +7,8 @@ import json
 import sys
 
 from src.models.load_data import load_data
-from src.models.transformer.transformer import TransactionClassifier, TransactionDataset
-from src.models.catboost.catboost import model as catboost_model
+from src.models.transformer import TransactionClassifier, TransactionDataset
+from src.models.train_catboost import model as catboost_model
 
 def load_model(config):
     with open(config) as f:

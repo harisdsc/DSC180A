@@ -4,8 +4,8 @@ import json
 import sys
 
 from src.models.load_data import load_data
-from src.models.catboost.catboost import train_catboost
-from src.models.transformer.transformer import  train_transformer
+from src.models.train_catboost import train_catboost
+from src.models.transformer import  train_transformer
     
 def train_model(config):
     with open(config) as f:

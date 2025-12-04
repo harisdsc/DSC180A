@@ -1,4 +1,4 @@
 {
-    "model_file": "src/models/logistic_regression/logistic_regression.sav",
+    "model_file": "models/logistic_regression.sav",
     "model": "LogisticRegression"
 }

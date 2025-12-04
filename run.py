@@ -22,9 +22,9 @@ CONFIG_PATHS = {
 }
 
 MODELS_PATHS = {
-    'catboost' : 'src/models/catboost/catboost.cbm',
-    'logistic-regression': 'src/models/logistic_regression/logistic_regression.pt',
-    'transformer': 'src/models/transformer/transformer.pt'
+    'catboost' : 'models/catboost.cbm',
+    'logistic-regression': 'models/logistic_regression.sav',
+    'transformer': 'models/transformer.pt'
 }
 
 def run_command(script_key, config_key=None, model_key=None):
