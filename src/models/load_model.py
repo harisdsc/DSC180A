@@ -1,7 +1,8 @@
 
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.model_selection import train_test_split
-from torch import torch, DataLoader
+from torch import torch
+import torch.utils.data as data
 import json
 import sys
 
@@ -63,7 +64,7 @@ def load_model(config):
                 vocab=vocab_map, 
                 normalization_stats=normalization_stats
             )
-            test_loader = DataLoader(test_dataset, batch_size=64, shuffle=False)
+            test_loader = data.DataLoader(test_dataset, batch_size=64, shuffle=False)
             code_preds = []
             with torch.no_grad():
                 for batch in test_loader:
