@@ -3,9 +3,11 @@ import pandas as pd
 import json
 import sys
 from catboost import CatBoostClassifier
+from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
+
 from src.models.load_data import load_data
+
 
 def load_model(config):
     with open(config) as f:
@@ -48,6 +50,9 @@ def load_model(config):
     print('Evaluating Model...')
     preds = model.predict(X_test)
     print(classification_report(y_test, preds))
+    print('Confusion Matrix:')
+    print(confusion_matrix(y_test, preds))
+        
 
 if __name__ == '__main__':
     args = sys.argv

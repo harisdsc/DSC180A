@@ -20,7 +20,7 @@ CONFIG_PATHS = {
 }
 
 MODELS_PATHS = {
-    'catboost' : 'src/models/catboost.cbm'
+    'catboost' : 'src/models/catboost/catboost.cbm'
 }
 
 def run_command(script_key, config_key=None, model_key=None):
@@ -67,7 +67,6 @@ if __name__ == '__main__':
 
     if not args.no_pull:
         print('Pulling latest from repo...')
-        # Added check=True to catch git errors
         try:
             subprocess.run(['git', 'pull'], check=True)
         except subprocess.CalledProcessError:

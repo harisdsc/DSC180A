@@ -10,14 +10,13 @@ def clean_memo(config_path):
     with open(config_path) as f:
         config = json.load(f)
 
-    input_file = config['input_memos']
     output_file = config['output_memos']
 
     # 2. Load Data
-    print(f"Loading data from {input_file}...")
-    df = pd.read_csv(input_file)
+    print(f"Loading data...")
+    df = pd.read_parquet('data/outflows.pqt')
 
-    # Initialize the cleaner class
+    # Initialize Cleaner
     cleaner = rules.TransactionCleaner()
 
     # 3. Apply Cleaning Logic
