@@ -26,13 +26,13 @@ def load_model(config):
     # Load model
     if selected_model == 'CatBoost':
         model = catboost_model
-        print(f"Loading CatBoost from {model_file.split('/')[-1]}...")
+        print(f"Loading model from {model_file.split('/')[-1]}...")
         model.load_model(model_file, format='cbm')
         preds = model.predict(X_test)
     elif selected_model == 'LogisticRegression':
         ...
     elif selected_model == 'Transformer':
-        print(f"Loading Transformer from {model_file.split('/')[-1]}...")
+        print(f"Loading model from {model_file.split('/')[-1]}...")
         preds = load_transformer(model_file, df, X_test, y_test) 
              
     # Evaluate Model
