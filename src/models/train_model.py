@@ -28,7 +28,7 @@ def train_model(config):
     if selected_model == 'CatBoost':
         model = train_catboost(X_train, y_train, X_test, y_test, model_file)
         preds = model.predict(X_test)
-    elif selected_model == 'LogRegression':
+    elif selected_model == 'LogisticRegression':
         ...
     elif selected_model == 'Transformer':
         preds = train_transformer(X_train, y_train, X_test, y_test, model_file)
@@ -42,6 +42,6 @@ def train_model(config):
         
 if __name__ == '__main__':
     args = sys.argv
-    config = args[1] if len(args) > 1 else 'configs/models/train.json'
+    config = args[1] if len(args) > 1 else 'configs/models/catboost.json'
     train_model(config)
     

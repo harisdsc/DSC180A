@@ -17,11 +17,13 @@ CONFIG_PATHS = {
     'train': 'configs/models/train.json',
     'load': 'configs/models/load.json',
     'catboost': 'configs/models/catboost.json',
+    'logistic-regression': 'configs/models/logistic_regression.json',
     'transformer': 'configs/models/transformer.json'
 }
 
 MODELS_PATHS = {
     'catboost' : 'src/models/catboost/catboost.cbm',
+    'logistic-regression': 'src/models/logistic_regression/logistic_regression.pt',
     'transformer': 'src/models/transformer/transformer.pt'
 }
 
