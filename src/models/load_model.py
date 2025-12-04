@@ -19,16 +19,17 @@ def load_model(config):
     df = load_data()
     
     # Split data
-    X = df.drop(columns=['posted_date', 'category', 'memo'])
+    X = df.drop(columns=['posted_date', 'category', 'memo', \
+                         'prism_consumer_id', 'prism_account_id'])
     y = df['category']
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+    # Load model
     if selected_model == 'Transformer':
             ...
     else:
         if selected_model == 'CatBoost':
             model = catboost_model
-            # Load Model
             print("Loading CatBoost Model...")
             model.load_model(model_file, format='cbm')
             preds = model.predict(X_test)

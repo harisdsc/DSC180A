@@ -40,6 +40,6 @@ def load_data():
     df = create_date_feats(df)
     df = create_amnt_feats(df)
     df = generate_holiday_features(df)
-    print(f'Loading/feature engineering done in {time.time() - start:.2f} seconds.')
+    print(f'Loading data/feature engineering done in {time.time() - start:.2f} seconds.')
     
     return df
