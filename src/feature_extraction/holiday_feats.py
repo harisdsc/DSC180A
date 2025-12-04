@@ -2,8 +2,13 @@ import pandas as pd
 import holidays
 from datetime import timedelta
 from pandarallel import pandarallel
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
 
 def add_custom_holidays(years):
+    """Return a dict of Black Friday + Cyber Monday for all years."""
     custom = {}
     for y in years:
         # Find Thanksgiving (4th Thursday of November)
@@ -12,27 +17,24 @@ def add_custom_holidays(years):
             if "Thanksgiving" in name
         ][0]
 
-        # Custom additions
         black_friday = thanksgiving + timedelta(days=1)
         cyber_monday = black_friday + timedelta(days=3)
 
         custom[black_friday] = "Black Friday"
         custom[cyber_monday] = "Cyber Monday"
+
     return custom
 
 
-
-# helper function to calculate distance from holidays
 def holiday_context(date, holiday_dates, holiday_names):
-    """Compute holiday context using globally pre-sorted dates."""
-    
-    # find prev and next index using search
+    """Compute holiday distance + labels for a single date."""
+
     prev_idx = max([i for i, h in enumerate(holiday_dates) if h <= date], default=None)
     next_idx = min([i for i, h in enumerate(holiday_dates) if h >= date], default=None)
 
     days_since_prev = (date - holiday_dates[prev_idx]).days if prev_idx is not None else None
     days_until_next = (holiday_dates[next_idx] - date).days if next_idx is not None else None
-    
+
     prev_name = holiday_names[prev_idx] if prev_idx is not None else None
     next_name = holiday_names[next_idx] if next_idx is not None else None
 
@@ -43,6 +45,10 @@ def holiday_context(date, holiday_dates, holiday_names):
         'next_holiday': next_name
     })
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
 def generate_holiday_features(df, date_col='posted_date'):
     """
     Full pipeline:
@@ -77,6 +83,12 @@ def generate_holiday_features(df, date_col='posted_date'):
     holiday_dates = [pd.Timestamp(d) for d, _ in sorted_holidays]
     holiday_names = [n for _, n in sorted_holidays]
 
+<<<<<<< HEAD
+=======
+    # Initialize pandarallel
+    pandarallel.initialize(progress_bar=False, verbose=0)
+
+>>>>>>> main
     # Apply holiday features
     holiday_feats = df[date_col].parallel_apply(
         lambda d: holiday_context(d, holiday_dates, holiday_names)
@@ -85,4 +97,8 @@ def generate_holiday_features(df, date_col='posted_date'):
     # Attach to original dataframe
     df = pd.concat([df, holiday_feats], axis=1)
 
+<<<<<<< HEAD
     return df
+=======
+    return df
+>>>>>>> main

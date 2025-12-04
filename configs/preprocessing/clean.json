@@ -1,4 +1,3 @@
 {
-  "input_memos": "data/memos.csv",
-  "output_memos": "data/memos_cleaned.csv"
+  "output_memos": "data/memo_clean.csv"
 }
