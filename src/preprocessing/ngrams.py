@@ -3,8 +3,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 import time
 import re
 
-start_time = time.time()
-df = pd.read_csv('data/memos.csv')
+df = pd.read_parquet('data/outflows.pqt')[['memo', 'category']]
+df = df[df['memo'] != df['category']]
 
 def preprocess_memo(text):
     text = text.upper()
@@ -19,6 +19,7 @@ vectorizer = CountVectorizer(
 )
 
 print("Analyzing ngrams...")
+start_time = time.time()
 X = vectorizer.fit_transform(df['memo'])
 
 counts = X.sum(axis=0).A1
@@ -29,8 +30,10 @@ freq_distribution = pd.DataFrame({
     'count': counts
 }).sort_values(by='count', ascending=False)
 
-print(freq_distribution.head(20))
-freq_distribution.to_csv('data/ngrams.csv', index=False)
-
 end_time = time.time()
 print(f"Completed in {end_time - start_time:.2f} seconds.")
+
+print(freq_distribution.head(20).reset_index(drop=True))
+print("Saving to data/ngrams.csv...")
+freq_distribution.to_csv('data/ngrams.csv', index=False)
+

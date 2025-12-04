@@ -2,10 +2,11 @@
 
 **Scripts**:
 - `ngrams`
-- `clean`
+- `clean` 
 - `train`
 - `load`
 
-**Configs**:
-- `root`
+**Configs/Models**:
 - `catboost`
+- `logistic-regression`
+- `transformer`
