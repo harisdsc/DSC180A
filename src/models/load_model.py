@@ -25,22 +25,24 @@ def load_model(config):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # Load model
-    if selected_model == 'Transformer':
-            ...
-    else:
-        if selected_model == 'CatBoost':
-            model = catboost_model
-            print("Loading CatBoost Model...")
-            model.load_model(model_file, format='cbm')
-            preds = model.predict(X_test)
-        elif selected_model == 'LogRegression':
-            ...
+    if selected_model == 'CatBoost':
+        model = catboost_model
+        print("Loading CatBoost Model...")
+        model.load_model(model_file, format='cbm')
+        preds = model.predict(X_test)
+    elif selected_model == 'LogRegression':
+        ...
+    elif selected_model == 'Transformer':
+        ...
              
-        # Evaluate Model
-        print('Evaluating Model...')
-        print(classification_report(y_test, preds))
-        print('Confusion Matrix:')
-        print(confusion_matrix(y_test, preds))
+    # Evaluate Model
+    print('Evaluating Model...')
+    print('Classification Report:')
+    print(classification_report(y_test, preds))
+    print('Confusion Matrix:')
+    print(confusion_matrix(y_test, preds))
+
+    return model
 
 if __name__ == '__main__':
     args = sys.argv
