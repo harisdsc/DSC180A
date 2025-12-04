@@ -7,3 +7,4 @@ catboost_info/
 notebooks/kyle/venv
 env/.venv
 .venv
+env/
