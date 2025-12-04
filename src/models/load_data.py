@@ -53,7 +53,8 @@ def load_data():
         df = create_date_feats(df)
         df = create_amnt_feats(df)
         df = generate_holiday_features(df)
-        print(f'Loading data/feature engineering done in {time.time() - start:.2f} seconds.')
+        print(f'Feature engineering done in {time.time() - start:.2f} seconds.')
+        print('Saving processed data...')
         df.to_csv('data/df.csv', index=False)
     
     df['clean_memo'] = df['clean_memo'].fillna(df['memo'])
