@@ -17,7 +17,7 @@ def train_model(config):
     selected_model = config['model']
     
     # Load Data + Feature Engineering
-    df = load_data().sample(1000)
+    df = load_data()
     
     # Split data
     X = df.drop(columns=['posted_date', 'category', 'memo', \
