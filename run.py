@@ -13,9 +13,6 @@ SCRIPTS = {
 CONFIG_PATHS = {
     'clean': 'configs/preprocessing/clean.json',
     'ngrams': 'configs/preprocessing/ngrams.json',
-    'root': 'configs/models/root.json',
-    'train': 'configs/models/train.json',
-    'load': 'configs/models/load.json',
     'catboost': 'configs/models/catboost.json',
     'logistic-regression': 'configs/models/logistic_regression.json',
     'transformer': 'configs/models/transformer.json'

@@ -58,4 +58,5 @@ def load_data():
         df.to_csv('data/df.csv', index=False)
     
     df['clean_memo'] = df['clean_memo'].fillna(df['memo'])
+    
     return df
