@@ -28,7 +28,6 @@ def load_data():
             df['clean_memo'].to_csv('data/memos_clean.csv', index=False)
             print(f'Cleaning memos done in {time.time() - clean_start:.2f} seconds.')
             
-        df['clean_memo'] = df['clean_memo'].fillna(df['memo'])
         
         # Feature Engineering
         print('Creating features...')
@@ -57,4 +56,5 @@ def load_data():
         print(f'Loading data/feature engineering done in {time.time() - start:.2f} seconds.')
         df.to_csv('data/df.csv', index=False)
     
+    df['clean_memo'] = df['clean_memo'].fillna(df['memo'])
     return df
