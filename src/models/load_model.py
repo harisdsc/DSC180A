@@ -42,8 +42,6 @@ def load_model(config):
     print('Confusion Matrix:')
     print(confusion_matrix(y_test, preds))
 
-    return model
-
 if __name__ == '__main__':
     args = sys.argv
     config = args[1] if len(args) > 1 else 'configs/models/catboost.json'
