@@ -10,15 +10,15 @@ from src.feature_extraction.holiday_feats import generate_holiday_features
 def load_data():
     # Load Data
     print('Loading data...')
-    if os.path.exists('data/df.csv'):
-        df = pd.read_csv('data/df.csv')
+    if os.path.exists('data/outflows_clean.csv'):
+        df = pd.read_csv('data/outflows_clean.csv')
     else:
         start = time.time()
         df = pd.read_parquet('data/outflows.pqt')
         df = df[df['memo'] != df['category']]
 
-        if os.path.exists('data/memos_clean.csv'):
-            memos = pd.read_csv('data/memos_clean.csv')
+        if os.path.exists('data/memo_clean.csv'):
+            memos = pd.read_csv('data/memo_clean.csv')
             df['clean_memo'] = memos['clean_memo']
         else:
             print('Cleaning memos...')
@@ -27,7 +27,7 @@ def load_data():
             df['clean_memo'] = df['memo'].apply(cleaner.clean)
             print(f'Cleaning completed in {time.time() - clean_start:.2f} seconds.')
             print('Saving cleaned memos...')
-            df['clean_memo'].to_csv('data/memos_clean.csv', index=False)
+            df['clean_memo'].to_csv('data/memo_clean.csv', index=False)
             
         # Feature Engineering
         print('Creating features...')
@@ -53,9 +53,9 @@ def load_data():
         df = create_date_feats(df)
         df = create_amnt_feats(df)
         df = generate_holiday_features(df)
-        print(f'Feature engineering done in {time.time() - start:.2f} seconds.')
-        print('Saving processed data to data/df.csv...')
-        df.to_csv('data/df.csv', index=False)
+        print(f'Feature engineering completed in {time.time() - start:.2f} seconds.')
+        print('Saving processed data to data/outflows_clean.csv...')
+        df.to_csv('data/outflows_clean.csv', index=False)
     
     df['clean_memo'] = df['clean_memo'].fillna(df['memo'])
     

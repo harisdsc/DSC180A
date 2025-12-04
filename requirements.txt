@@ -33,7 +33,7 @@ scikit-learn==1.7.2
 scipy==1.16.3
 setuptools==80.9.0
 six==1.17.0
-sympy==1.14.0
+sympy==1.13.1
 threadpoolctl==3.6.0
 torch==2.5.1
 typing_extensions==4.15.0
