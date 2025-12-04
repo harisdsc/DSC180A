@@ -1,10 +1,10 @@
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, confusion_matrix
 import numpy as np
 import pandas as pd
 import time
 import json
 import sys
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, confusion_matrix
 
 from src.models.load_data import load_data
 from src.models.catboost.catboost import train_catboost
@@ -20,7 +20,8 @@ def train_model(config):
     df = load_data()
     
     # Split data
-    X = df.drop(columns=['posted_date', 'category', 'memo'])
+    X = df.drop(columns=['posted_date', 'category', 'memo', \
+                         'prism_consumer_id', 'prism_account_id'])
     y = df['category']
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -32,7 +33,8 @@ def train_model(config):
             preds = model.predict(X_test)
         elif selected_model == 'LogRegression':
              ...
-             
+        
+        # Evaluate Model
         print('Evaluating Model...')
         print(classification_report(y_test, preds))
         print('Confusion Matrix:')

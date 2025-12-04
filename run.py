@@ -31,19 +31,22 @@ def run_command(script_key, config_key=None, model_key=None):
     script_path = SCRIPTS[script_key]
     
     cmd = ['python3', script_path]
+    cmd_string = [script_path.split('/')[-1]]
 
     if config_key:
         config_path = CONFIG_PATHS.get(config_key, config_key)
         cmd.append(config_path)
+        cmd_string.append(config_path.split('/')[-1])
     
     if model_key:
         model_path = MODELS_PATHS.get(model_key, model_key)
         cmd.append(model_path)
+        cmd_string.append(model_path.split('/')[-1])
 
     env = os.environ.copy()
     env['PYTHONPATH'] = os.getcwd() + os.pathsep + env.get('PYTHONPATH', '')
 
-    print(f"Running: {' '.join(cmd)}")
+    print(f"Running: {' '.join(cmd_string)}")
     start_time = time.time()
     try:
         subprocess.run(cmd, env=env, check=True)
