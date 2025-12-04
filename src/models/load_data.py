@@ -25,7 +25,7 @@ def load_data():
             clean_start = time.time()
             cleaner = TransactionCleaner()
             df['clean_memo'] = df['memo'].apply(cleaner.clean)
-            print(f'Cleaning done in {time.time() - clean_start:.2f} seconds.')
+            print(f'Cleaning completed in {time.time() - clean_start:.2f} seconds.')
             print('Saving cleaned memos...')
             df['clean_memo'].to_csv('data/memos_clean.csv', index=False)
             
