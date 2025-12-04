@@ -15,7 +15,7 @@ def train_model(config):
     output_file = config['output_file']
 
     df = load_data()
-    
+    DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.mps.is_available() else "cpu")
     # Split data
     X = df.drop(columns=['posted_date', 'category', 'memo'])
     y = df['category']
@@ -23,7 +23,14 @@ def train_model(config):
     
     text_cols = ['clean_memo']
     cat_cols = ['day_of_week', 'month', 'quarter', 'whole_dollar', 'prism_consumer_id', 'prism_account_id']    
-    
+    extra_cols = [
+            "dow_sin", "dow_cos", 
+            "month_sin", "month_cos", 
+            "quarter_sin", "quarter_cos",
+            "days_since_last_txn_z",
+            "user_memo_count_z"
+        ]
+    labels = y.astype("category").cat.codes.to_numpy(dtype=np.int64)
     # Initialize Model
     model = CatBoostClassifier(
         iterations=10_000,

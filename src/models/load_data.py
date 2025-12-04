@@ -18,14 +18,21 @@ def load_data():
     df['day_of_month'] = df['posted_date'].dt.day
     df['day_of_week'] = df['posted_date'].dt.dayofweek
     df['month'] = df['posted_date'].dt.month
-    df['month_sin'] = np.sin(2 * np.pi * df['month']/12)
-    df['month_cos'] = np.cos(2 * np.pi * df['month']/12)
+    df["quarter"] = df['posted_date'].dt.quarter
+    df["dow_sin"]   = np.sin(2 * np.pi * df["day_of_week"]   / 7)
+    df["dow_cos"]   = np.cos(2 * np.pi * df["day_of_week"]   / 7)
+    df["month_sin"] = np.sin(2 * np.pi * df["month"] / 12)
+    df["month_cos"] = np.cos(2 * np.pi * df["month"] / 12)
+    df["quarter_sin"] = np.sin(2 * np.pi * df["quarter"] / 4)
+    df["quarter_cos"] = np.cos(2 * np.pi * df["quarter"] / 4)
     df['log_amount'] = np.log1p(df['amount']) 
     df['cents'] = (df['amount'] * 100) % 100 
     df['whole_dollar'] = np.where(df['cents'] == 0, 1, 0)
     df = df.sort_values(['prism_consumer_id', 'posted_date'])
     df['days_since_last_txn'] = df.groupby('prism_consumer_id')['posted_date'].diff().dt.days
     df['user_memo_count'] = df.groupby(['prism_consumer_id', 'clean_memo']).cumcount()
+    df['days_since_last_txn_z'] = np.log1p(df['days_since_last_txn'])
+    df['user_memo_count_z'] = np.log1p(df['user_memo_count'])
     df = create_date_feats(df)
     df = create_amnt_feats(df)
     
