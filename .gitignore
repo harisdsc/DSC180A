@@ -5,3 +5,4 @@
 data/
 catboost_info/
 notebooks/kyle/venv
+env/
