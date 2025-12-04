@@ -37,6 +37,7 @@ def load_model(config):
              
     # Evaluate Model
     print('Evaluating Model...')
+    print('Classification Report:')
     print(classification_report(y_test, preds))
     print('Confusion Matrix:')
     print(confusion_matrix(y_test, preds))
