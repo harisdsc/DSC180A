@@ -24,16 +24,19 @@ def train_model(config):
     y = df['category']
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    if selected_model == 'CatBoost':
-        model = train_catboost(X_train, y_train, X_test, y_test, output_file)
-        preds = model.predict(X_test)
-    elif selected_model == 'LogRegression':
-        train_transformer()
-    # Evaluate Model 
-    print('Evaluating Model...')
-    print(classification_report(y_test, preds))
-    print('Confusion Matrix:')
-    print(confusion_matrix(y_test, preds))
+    if selected_model == 'Transformer':
+            ...
+    else:
+        if selected_model == 'CatBoost':
+            model = train_catboost(X_train, y_train, X_test, y_test, output_file)
+            preds = model.predict(X_test)
+        elif selected_model == 'LogRegression':
+             ...
+             
+        print('Evaluating Model...')
+        print(classification_report(y_test, preds))
+        print('Confusion Matrix:')
+        print(confusion_matrix(y_test, preds))
         
         
 if __name__ == '__main__':
