@@ -3,6 +3,7 @@ import pandas as pd
 import time
 import os
 
+from src.preprocessing.rules import TransactionCleaner
 from src.feature_extraction.date_amnt_feats import create_date_feats, create_amnt_feats
 from src.feature_extraction.holiday_feats import generate_holiday_features
 
@@ -14,11 +15,20 @@ def load_data():
     else:
         start = time.time()
         df = pd.read_parquet('data/outflows.pqt')
-        memos = pd.read_csv('data/memos_clean.csv')
-        df['clean_memo'] = memos['clean_memo']
-        
-        df['clean_memo'] = df['clean_memo'].fillna(df['memo'])
         df = df[df['memo'] != df['category']]
+
+        if os.path.exists('data/memos_clean.csv'):
+            memos = pd.read_csv('data/memos_clean.csv')
+            df['clean_memo'] = memos['clean_memo']
+        else:
+            print('Cleaning memos...')
+            clean_start = time.time()
+            cleaner = TransactionCleaner()
+            df['clean_memo'] = df['memo'].apply(cleaner.clean)
+            df['clean_memo'].to_csv('data/memos_clean.csv', index=False)
+            print(f'Cleaning memos done in {time.time() - clean_start:.2f} seconds.')
+            
+        df['clean_memo'] = df['clean_memo'].fillna(df['memo'])
         
         # Feature Engineering
         print('Creating features...')
