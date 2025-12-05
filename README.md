@@ -1,5 +1,4 @@
 ## run.py
----
 ### Scripts
 > `python3 run.py`**`<script>`**
 - `ngrams` : Generate bi- and tri- gram frequencies of patterns in memo column then save counts to file.
