@@ -20,14 +20,6 @@ CONFIG_PATHS = {
 }
 
 def run_command(script_key, config_key=None):
-    if script_key not in SCRIPTS:
-        print(f"Error: Unknown script '{script_key}'. Available: {list(SCRIPTS.keys())}")
-        return
-    
-    if config_key and config_key not in CONFIG_PATHS:
-        print(f"Error: Unknown config '{config_key}'. Available: {list(CONFIG_PATHS.keys())}")
-        return
-
     script_path = SCRIPTS[script_key]
     
     cmd = ['python3', script_path]
@@ -49,22 +41,21 @@ def run_command(script_key, config_key=None):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-
-    # Positional Arguments
     parser.add_argument('script')
     parser.add_argument('config', nargs='?')
 
-    # Flags
-    parser.add_argument('--no-pull', action='store_true')
-
     args = parser.parse_args()
 
-    if not args.no_pull:
-        print('Pulling latest from repo...')
-        subprocess.run(['git', 'pull'], check=True)
+    print('Pulling latest from repo...')
+    subprocess.run(['git', 'pull'], check=True)
 
     if args.script == 'all':
-        for key in SCRIPTS.keys():
-            run_command(key, args.config)
+        run_command('ngrams', 'ngrams')
+        run_command('clean', 'clean')
+        run_command('data')
+
+        for model in ['catboost', 'log-reg', 'transformer']:
+            run_command('train', model)
+            run_command('load', model)
     else:
         run_command(args.script, args.config)

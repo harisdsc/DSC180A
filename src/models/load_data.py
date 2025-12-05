@@ -53,9 +53,11 @@ def load_data(script=False):
         df['user_memo_count'] = df['user_memo_count'].fillna(0)
         df['days_since_last_txn_z'] = np.log1p(df['days_since_last_txn'])
         df['user_memo_count_z'] = np.log1p(df['user_memo_count'])
+
         df = create_date_feats(df)
         df = create_amnt_feats(df)
         df = generate_holiday_features(df)
+
         print(f'Feature engineering completed in {time.time() - start_feats:.2f} seconds.')
 
         print('Saving processed data to data/outflows_clean.csv...')
@@ -64,7 +66,6 @@ def load_data(script=False):
     df['clean_memo'] = df['clean_memo'].fillna(df['memo'])
 
     outflow_consumers = df["prism_consumer_id"].unique()
-
     train_ids, test_ids = train_test_split(outflow_consumers, test_size=0.2, random_state=42)
     
     train_df = df[df["prism_consumer_id"].isin(train_ids)]
