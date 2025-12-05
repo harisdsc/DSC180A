@@ -10,11 +10,13 @@
 - `train` : Train model on processed data then save to file.
 - `load` : Load model from file, test accuracy, and print confusion matrix.
 --- 
+- `all` : Run all scripts in sequential order (incl. train & load each model)
+  - `python3 run.py all`
+---
 ### Models 
 > `python3 run.py <script>`**`<model>`**
 - `catboost`
 - `log-reg`
 - `transformer`
 ---
-- `all` : Run all scripts in sequential order (incl. train & load each model)
-  - `python3 run.py all`
+
