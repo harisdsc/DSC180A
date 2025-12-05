@@ -19,5 +19,5 @@
 ### Models 
 > `python3 run.py <script>`**`<model>`**
 - `catboost`
-- `logistic-regression`
+- `log-reg`
 - `transformer`
