@@ -8,7 +8,7 @@ import time
 from collections import Counter
 from torch.nn.utils.rnn import pad_sequence
 
-def build_vocab(text_list, max_vocab=20002):
+def build_vocab(text_list, max_vocab=89292):
     words = [str(t).lower().split() for t in text_list]
     all_words = [item for sublist in words for item in sublist]
     counts = Counter(all_words)
@@ -31,12 +31,10 @@ def tokenize_and_pad(text_list, vocab, max_len=50):
         padded = padded[:, :max_len]
     return padded
 
-# --- Dataset ---
 class TransactionDataset(data.Dataset):
-    # Added normalization_stats parameter
     def __init__(self, df, vocab, max_seq_len=50, normalization_stats=None):
         self.memos = df["clean_memo"].tolist()
-        df = df.copy() # Avoid SettingWithCopy warnings
+        df = df.copy()
         df['whole_dollar'] = df['whole_dollar'].astype(float)
 
         cols_to_normalize = [
@@ -47,35 +45,31 @@ class TransactionDataset(data.Dataset):
             'days_since_prev'
         ]
 
-        # Logic to handle Training vs Inference normalization
         self.normalization_stats = {}
         
         for col in cols_to_normalize:
             df[col] = df[col].fillna(0)
             
             if normalization_stats is None:
-                # TRAINING MODE: Calculate and store stats
                 mean = df[col].mean()
                 std = df[col].std()
                 self.normalization_stats[col] = {'mean': mean, 'std': std}
             else:
-                # INFERENCE MODE: Use loaded stats
                 mean = normalization_stats[col]['mean']
                 std = normalization_stats[col]['std']
 
-            # Apply normalization
             df[f"{col}_z"] = (df[col] - mean) / (std + 1e-6)
 
-        # ... (The rest of your numericals setup remains exactly the same) ...
         extra_cols = [
             "dow_sin", "dow_cos", 
-            "month_sin", "month_cos", 
-            "log_amnt",                       
-            "whole_dollar",                 
-            "days_until_next_holiday_z",    
-            "days_since_prev_holiday_z",    
-            "month_med_amnt_diff_z",        
-            "rolling_avg_days_between_txn_z"
+            "month_sin", "month_cos",
+            "quarter_sin", "quarter_cos",
+            "log_amount",                   
+            "whole_dollar",
+            "days_since_last_txn_z", 
+            "user_memo_count_z",
+            "days_until_next_holiday_z", 
+            "days_since_prev_holiday_z" 
         ]
         clean_numericals = df[extra_cols].fillna(0.0).values.astype(np.float32)
         clean_numericals = np.nan_to_num(clean_numericals, nan=0.0, posinf=0.0, neginf=0.0)
@@ -100,7 +94,6 @@ class TransactionDataset(data.Dataset):
             'label': torch.tensor(self.labels[idx], dtype=torch.long)
         }
 
-# ... [Keep PositionalEncoding and TransactionClassifier exactly as they were] ...
 class PositionalEncoding(nn.Module):
     def __init__(self, d_model, dropout=0.1, max_len=5000):
         super().__init__()
@@ -117,7 +110,7 @@ class PositionalEncoding(nn.Module):
         return self.dropout(x)
 
 class TransactionClassifier(nn.Module):
-    def __init__(self, num_classes, d_model=128, nhead=4, num_layers=2, vocab_size=20002, num_numerical_features=8, dropout=0.1):
+    def __init__(self, num_classes, d_model=128, nhead=4, num_layers=2, vocab_size=89292, num_numerical_features=12, dropout=0.1):
         super().__init__()
         self.text_embedding = nn.Embedding(vocab_size, d_model)
         self.pos_encoder = PositionalEncoding(d_model, dropout)
@@ -183,7 +176,7 @@ def train_transformer(X_train, y_train, X_test, y_test, model_file):
         nhead=4,
         num_layers=2,
         vocab_size=vocab_size,
-        num_numerical_features=10,
+        num_numerical_features=12,
         dropout=0.1
     ).to(DEVICE)
     
@@ -238,13 +231,11 @@ def train_transformer(X_train, y_train, X_test, y_test, model_file):
         'cat_to_code': cat_to_code,
         'num_classes': num_classes,
         'vocab_size': vocab_size,
-        # ADD THIS LINE:
         'normalization_stats': train_dataset.normalization_stats 
     }
     torch.save(save_content, model_file)
     print("Model saved successfully.")
 
-    # Test Loop
     df_test = X_test.copy()
     df_test["category"] = y_test
     df_test["category_code"] = df_test["category"].map(cat_to_code).fillna(-1).astype(int)

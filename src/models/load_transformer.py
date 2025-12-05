@@ -19,7 +19,7 @@ def load_transformer(model_file, df, X_test, y_test):
         nhead=4, 
         num_layers=2, 
         vocab_size=vocab_size, 
-        num_numerical_features=10 
+        num_numerical_features=12 
     ).to(device)
 
     model.load_state_dict(model_state)
