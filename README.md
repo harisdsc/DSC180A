@@ -17,5 +17,5 @@
 - `log-reg`
 - `transformer`
 ---
-- `all` : Run all scripts in sequential order (incl. each model)
+- `all` : Run all scripts in sequential order (incl. train & load each model)
   - `python3 run.py all`
