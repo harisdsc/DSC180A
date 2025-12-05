@@ -60,15 +60,24 @@ def load_data(script=False):
 
         print('Saving processed data to data/outflows_clean.csv...')
         df.to_csv('data/outflows_clean.csv', index=False)
-    
+
     df['clean_memo'] = df['clean_memo'].fillna(df['memo'])
 
-    # Split data
-    X = df.drop(columns=['posted_date', 'category', 'memo', \
-                         'prism_consumer_id', 'prism_account_id'])
-    y = df['category']
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    outflow_consumers = df["prism_consumer_id"].unique()
 
+    train_ids, test_ids = train_test_split(outflow_consumers, test_size=0.2, random_state=42)
+    
+    train_df = df[df["prism_consumer_id"].isin(train_ids)]
+    test_df  = df[df["prism_consumer_id"].isin(test_ids)]
+
+    cols_to_drop = ['posted_date', 'category', 'memo', 'prism_consumer_id', 'prism_account_id']
+
+    X_train = train_df.drop(columns=cols_to_drop)
+    y_train = train_df['category']
+    
+    X_test = test_df.drop(columns=cols_to_drop)
+    y_test = test_df['category']
+    
     return df, X_train, X_test, y_train, y_test
 
 if __name__ == '__main__':

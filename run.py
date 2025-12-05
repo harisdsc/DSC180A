@@ -45,7 +45,7 @@ def run_command(script_key, config_key=None):
     
     start_time = time.time()
     subprocess.run(cmd, env=env, check=True)
-    print(f"'{script_key}' completed in {time.time() - start_time:.2f} seconds")
+    print(f"'{script_key}{' ' + config_key if config_key else ''}' completed in {time.time() - start_time:.2f} seconds")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

@@ -12,13 +12,14 @@ from src.models.train_log import pipe as logreg_pipe
 
 def load_model(config):
     df, X_train, X_test, y_train, y_test = load_data()
-    
+    model = None
+
     with open(config) as f:
         config = json.load(f)
 
     model_file = config['model_file']
     selected_model = config['model']
-
+    
     # Load model
     if selected_model == 'CatBoost':
         model = catboost_model
@@ -39,7 +40,9 @@ def load_model(config):
     print('Classification Report:')
     print(classification_report(y_test, preds))
     print('Confusion Matrix:')
-    print(confusion_matrix(y_test, preds))
+    print(confusion_matrix(y_test, preds, normalize='true'))
+
+    return model
 
 if __name__ == '__main__':
     args = sys.argv

@@ -31,7 +31,7 @@ def train_model(config):
     print('Classification Report:')
     print(classification_report(y_test, preds))
     print('Confusion Matrix:')
-    print(confusion_matrix(y_test, preds))
+    print(confusion_matrix(y_test, preds, normalize='true'))
         
 if __name__ == '__main__':
     args = sys.argv
