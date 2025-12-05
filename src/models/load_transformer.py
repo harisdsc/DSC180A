@@ -4,8 +4,8 @@ import torch.utils.data as data
 from src.models.train_transformer import TransactionClassifier, TransactionDataset
 
 def load_transformer(model_file, df, X_test, y_test):
-    checkpoint = torch.load(model_file, weights_only=False)
     device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.mps.is_available() else "cpu")
+    checkpoint = torch.load(model_file, weights_only=False, map_location=device)
 
     vocab_map = checkpoint['vocab_map']
     normalization_stats = checkpoint['normalization_stats']
