@@ -7,17 +7,15 @@
 - `clean` : Clean memos then save cleaned columns to file.
 - `data` : Clean and apply feature engineering to data then save to file. 
 ---
-
+> `python3 run.py`**`<script>`**`<model>`
 - `train` : Train model on processed data then save to file.
-  - `python3 run.py train <model>`
 - `load` : Load model from file, test accuracy, and print confusion matrix.
-  - `python3 run.py load <model>`
----
-- `all` : Runs all scripts in sequential order (incl. each model)
-  - `python3 run.py all`
 --- 
 ### Models 
 > `python3 run.py <script>`**`<model>`**
 - `catboost`
 - `log-reg`
 - `transformer`
+---
+- `all` : Run all scripts in sequential order (incl. each model)
+  - `python3 run.py all`
