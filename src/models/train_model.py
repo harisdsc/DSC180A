@@ -28,9 +28,9 @@ def train_model(config):
         
     # Evaluate Model
     print('Evaluating Model...')
-    print('Classification Report:')
+    print(f'Classification Report for {selected_model}:')
     print(classification_report(y_test, preds))
-    print('Confusion Matrix:')
+    print(f'Confusion Matrix for {selected_model}:')
     print(confusion_matrix(y_test, preds, normalize='true'))
         
 if __name__ == '__main__':
