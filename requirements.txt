@@ -31,6 +31,7 @@ pytz==2025.2
 regex==2025.11.3
 scikit-learn==1.7.2
 scipy==1.16.3
+seaborn==0.13.2
 six==1.17.0
 sympy==1.13.1
 threadpoolctl==3.6.0
