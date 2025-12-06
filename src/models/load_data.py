@@ -19,13 +19,6 @@ def load_data(script=False):
         if os.path.exists('/uss/hdsi-prismdata/q1-ucsd-outflows.pqt'):
             df = pd.read_parquet('/uss/hdsi-prismdata/q1-ucsd-outflows.pqt')
         else:
-            if not os.path.exists('data/outflows.pqt'):
-                if os.path.exists('data/outflows.zip'):
-                    print('Unzipping data...')
-                    subprocess.run(['unzip', '-o', 'data/outflows.zip', '-d', 'data/'], check=True)
-                else:
-                    raise FileNotFoundError("Could not find data/outflows.pqt or data/outflows.zip")
-            
             df = pd.read_parquet('data/outflows.pqt')
 
         df = df[df['memo'] != df['category']]
