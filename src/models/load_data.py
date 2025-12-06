@@ -11,7 +11,9 @@ from src.feature_extraction.holiday_feats import generate_holiday_features
 def load_data(script=False):
     # Load Data
     print('Processing data...')
-    if os.path.exists('data/outflows_clean.csv') and not script:
+    if os.path.exists('/uss/hdsi-prismdata/q1-ucsd-outflows.pqt') and not script:
+        df = pd.read_parquet('/uss/hdsi-prismdata/q1-ucsd-outflows.pqt')
+    elif os.path.exists('data/outflows_clean.csv') and not script:
         df = pd.read_csv('data/outflows_clean.csv')
     else:
         df = pd.read_parquet('data/outflows.pqt')

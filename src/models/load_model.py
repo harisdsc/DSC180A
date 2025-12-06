@@ -40,7 +40,8 @@ def load_model(config):
     print(f'Classification Report for {selected_model}:')
     print(classification_report(y_test, preds))
     print(f'Confusion Matrix for {selected_model}:')
-    print(confusion_matrix(y_test, preds, normalize='true'))
+    cm = confusion_matrix(y_test, preds, normalize='true')
+    print(cm)
 
     labels = sorted(df['label'].unique())
 
