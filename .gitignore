@@ -2,9 +2,7 @@
 **/.DS_Store
 **/__pycache__/
 **/.ipynb_checkpoints/
-data/
-catboost_info/
-notebooks/kyle/venv
-env/.venv
-.venv
+**/catboost_info/
+data/*
 env/
+venv/

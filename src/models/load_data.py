@@ -1,6 +1,7 @@
 from sklearn.model_selection import train_test_split
 import numpy as np
 import pandas as pd
+import subprocess
 import time
 import os
 
@@ -11,12 +12,22 @@ from src.feature_extraction.holiday_feats import generate_holiday_features
 def load_data(script=False):
     # Load Data
     print('Processing data...')
-    if os.path.exists('/uss/hdsi-prismdata/q1-ucsd-outflows.pqt') and not script:
-        df = pd.read_parquet('/uss/hdsi-prismdata/q1-ucsd-outflows.pqt')
-    elif os.path.exists('data/outflows_clean.csv') and not script:
+    if not script and os.path.exists('data/outflows_clean.csv'):
+        print('Loading cached processed data...')
         df = pd.read_csv('data/outflows_clean.csv')
     else:
-        df = pd.read_parquet('data/outflows.pqt')
+        if os.path.exists('/uss/hdsi-prismdata/q1-ucsd-outflows.pqt'):
+            df = pd.read_parquet('/uss/hdsi-prismdata/q1-ucsd-outflows.pqt')
+        else:
+            if not os.path.exists('data/outflows.pqt'):
+                if os.path.exists('data/outflows.zip'):
+                    print('Unzipping data...')
+                    subprocess.run(['unzip', '-o', 'data/outflows.zip', '-d', 'data/'], check=True)
+                else:
+                    raise FileNotFoundError("Could not find data/outflows.pqt or data/outflows.zip")
+            
+            df = pd.read_parquet('data/outflows.pqt')
+
         df = df[df['memo'] != df['category']]
 
         if os.path.exists('data/memo_clean.csv') and not script:
