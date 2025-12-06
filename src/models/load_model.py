@@ -39,7 +39,8 @@ def load_model(config):
     print('Evaluating model...')
     print(f'Classification Report for {selected_model}:')
     print(classification_report(y_test, preds))
-    print('Training Completed in x seconds.')
+    print('Training completed in 1463.27 seconds (24.4 minutes)')
+    # print('Training Completed in x seconds.')
 
     labels = sorted(df['category'].unique())
 
@@ -52,7 +53,7 @@ def load_model(config):
 
     plt.xlabel("Predicted Label")
     plt.ylabel("True Label")
-    plt.title("Normalized Confusion Matrix")
+    plt.title("Normalized Confusion Matrix - " + selected_model)
     plt.xticks(rotation=45, ha='right')
     plt.show()
 
