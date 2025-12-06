@@ -2,6 +2,7 @@ from src.preprocessing.rules import TransactionCleaner
 import sys
 import json
 import time
+import os
 import pandas as pd
 
 def clean_memo(config):
@@ -11,7 +12,10 @@ def clean_memo(config):
     output_file = config['output_memos']
 
     print(f"Loading data...")
-    df = pd.read_parquet('data/outflows.pqt')
+
+    data = '/uss/hdsi-prismdata/q1-ucsd-outflows.pqt' if os.path.exists('/uss/hdsi-prismdata/q1-ucsd-outflows.pqt') \
+        else 'data/outflows.pqt'
+    df = pd.read_parquet(data)
     df = df[df['memo'] != df['category']]
 
     cleaner = TransactionCleaner()
