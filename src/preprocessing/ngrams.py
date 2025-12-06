@@ -1,9 +1,13 @@
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
+import os
 import time
 import re
 
-df = pd.read_parquet('data/outflows.pqt')[['memo', 'category']]
+data = '/uss/hdsi-prismdata/q1-ucsd-outflows.pqt' if os.path.exists('/uss/hdsi-prismdata/q1-ucsd-outflows.pqt') \
+    else 'data/outflows.pqt'
+
+df = pd.read_parquet(data)[['memo', 'category']]
 df = df[df['memo'] != df['category']]
 
 def preprocess_memo(text):
