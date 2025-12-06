@@ -56,7 +56,7 @@ def train_logistic_regression(X_train, y_train, X_test, y_test, model_file):
     print(f'Training completed in {train_end:.2f} seconds.')
     
     # Save Model
-    print('Saving Model...')
+    print('Saving model...')
     pickle.dump(pipe, open(model_file, 'wb'))
 
     return pipe

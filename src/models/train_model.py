@@ -27,7 +27,7 @@ def train_model(config):
         preds = train_transformer(X_train, y_train, X_test, y_test, model_file)
         
     # Evaluate Model
-    print('Evaluating Model...')
+    print('Evaluating model...')
     print(f'Classification Report for {selected_model}:')
     print(classification_report(y_test, preds))
     print(f'Confusion Matrix for {selected_model}:')
