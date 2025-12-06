@@ -42,6 +42,22 @@ def load_model(config):
     print(f'Confusion Matrix for {selected_model}:')
     print(confusion_matrix(y_test, preds, normalize='true'))
 
+    labels = sorted(df['label'].unique())
+
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.metrics import confusion_matrix
+
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(cm, annot=True, fmt=".2f", cmap="Blues",
+                xticklabels=labels, yticklabels=labels)
+
+    plt.xlabel("Predicted Label")
+    plt.ylabel("True Label")
+    plt.title("Normalized Confusion Matrix")
+    plt.show()
+
+
     return model
 
 if __name__ == '__main__':
