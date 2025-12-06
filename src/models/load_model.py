@@ -39,8 +39,6 @@ def load_model(config):
     print('Evaluating model...')
     print(f'Classification Report for {selected_model}:')
     print(classification_report(y_test, preds))
-    print('Training completed in 1463.27 seconds (24.4 minutes)')
-    # print('Training Completed in x seconds.')
 
     labels = sorted(df['category'].unique())
 
