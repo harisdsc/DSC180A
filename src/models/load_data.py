@@ -1,9 +1,9 @@
-from sklearn.model_selection import train_test_split
 import numpy as np
 import pandas as pd
 import subprocess
 import time
 import os
+from sklearn.model_selection import train_test_split
 
 from src.preprocessing.rules import TransactionCleaner
 from src.feature_extraction.date_amnt_feats import create_date_feats, create_amnt_feats
@@ -73,7 +73,7 @@ def load_data(script=False):
 
         print(f'Feature engineering completed in {time.time() - start_feats:.2f} seconds.')
 
-        print('Saving processed data to data/outflows_clean.csv...')
+        print('Saving processed data...')
         df.to_csv('data/outflows_clean.csv', index=False)
 
     df['clean_memo'] = df['clean_memo'].fillna(df['memo'])

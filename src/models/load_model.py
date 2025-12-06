@@ -58,7 +58,6 @@ def load_model(config):
     plt.title("Normalized Confusion Matrix")
     plt.show()
 
-
     return model
 
 if __name__ == '__main__':
