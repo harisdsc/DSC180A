@@ -40,8 +40,7 @@ def load_model(config):
     print(f'Classification Report for {selected_model}:')
     print(classification_report(y_test, preds))
     print(f'Confusion Matrix for {selected_model}:')
-    cm = confusion_matrix(y_test, preds, normalize='true')
-    print(cm)
+
 
     labels = sorted(df['label'].unique())
 
@@ -50,7 +49,7 @@ def load_model(config):
     from sklearn.metrics import confusion_matrix
 
     plt.figure(figsize=(10, 8))
-    sns.heatmap(cm, annot=True, fmt=".2f", cmap="Blues",
+    sns.heatmap(confusion_matrix(y_test, preds, normalize='true'), annot=True, fmt=".2f", cmap="Blues",
                 xticklabels=labels, yticklabels=labels)
 
     plt.xlabel("Predicted Label")
