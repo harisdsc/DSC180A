@@ -13,7 +13,7 @@ def load_data(script=False):
     # Load Data
     print('Processing data...')
     if not script and os.path.exists('data/outflows_clean.csv'):
-        print('Loading cached processed data...')
+        print('Loading processed data...')
         df = pd.read_csv('data/outflows_clean.csv')
     else:
         if os.path.exists('/uss/hdsi-prismdata/q1-ucsd-outflows.pqt'):

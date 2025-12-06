@@ -42,7 +42,7 @@ def load_model(config):
     print(f'Confusion Matrix for {selected_model}:')
 
 
-    labels = sorted(df['label'].unique())
+    labels = sorted(df['category'].unique())
 
     import matplotlib.pyplot as plt
     import seaborn as sns
